@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:p="tapestry:parameter">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>${title}</title>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span3">
+					<ul>
+						<li t:type="loop" source="pageNames" value="pageName"
+							class="prop:classForPageName">
+							<t:pagelink page="prop:pageName">${pageName}</t:pagelink>
+						</li>
+					</ul>
+				</div>
+				<div class="span9">
+					<h1>
+						<t:pagelink page="index">be.virtualsushi.wadisda:wadisda</t:pagelink>
+	                    &nbsp;
+						version ${appVersion}
+					</h1>
+					<t:body/>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
