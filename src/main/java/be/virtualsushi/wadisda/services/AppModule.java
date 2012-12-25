@@ -6,12 +6,26 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Local;
+import org.apache.tapestry5.jpa.EntityManagerSource;
+import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
+import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
+
+import be.virtualsushi.wadisda.model.Attitude;
+import be.virtualsushi.wadisda.model.ConversationType;
+import be.virtualsushi.wadisda.model.Location;
+import be.virtualsushi.wadisda.model.Origin;
+import be.virtualsushi.wadisda.model.Presentation;
+import be.virtualsushi.wadisda.model.Task;
+import be.virtualsushi.wadisda.model.TaskType;
+import be.virtualsushi.wadisda.model.UsageType;
+import be.virtualsushi.wadisda.model.User;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -19,6 +33,7 @@ import org.slf4j.Logger;
  * service definitions.
  */
 public class AppModule {
+
 	public static void bind(ServiceBinder binder) {
 		// binder.bind(MyServiceInterface.class, MyServiceImpl.class);
 
@@ -28,8 +43,7 @@ public class AppModule {
 		// invoking the constructor.
 	}
 
-	public static void contributeFactoryDefaults(
-			MappedConfiguration<String, Object> configuration) {
+	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
 		// The application version number is incorprated into URLs for some
 		// assets. Web browsers will cache assets because of the far future
 		// expires
@@ -40,12 +54,10 @@ public class AppModule {
 		// (a random hexadecimal number), but may be further overriden by
 		// DevelopmentModule or
 		// QaModule.
-		configuration.override(SymbolConstants.APPLICATION_VERSION,
-				"1.0-SNAPSHOT");
+		configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
 	}
 
-	public static void contributeApplicationDefaults(
-			MappedConfiguration<String, Object> configuration) {
+	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
 		// Contributions to ApplicationDefaults will override any contributions
 		// to
 		// FactoryDefaults (with the same key). Here we're restricting the
@@ -59,8 +71,7 @@ public class AppModule {
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
 	}
 
-	public static void contributeClasspathAssetAliasManager(
-			MappedConfiguration<String, String> configuration) {
+	public static void contributeClasspathAssetAliasManager(MappedConfiguration<String, String> configuration) {
 		configuration.add("bootstrap", "META-INF/resources/webjars/bootstrap/2.2.2");
 	}
 
@@ -85,8 +96,7 @@ public class AppModule {
 	 */
 	public RequestFilter buildTimingFilter(final Logger log) {
 		return new RequestFilter() {
-			public boolean service(Request request, Response response,
-					RequestHandler handler) throws IOException {
+			public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
 				long startTime = System.currentTimeMillis();
 
 				try {
@@ -114,9 +124,7 @@ public class AppModule {
 	 * module. Without @Local, there would be an error due to the other
 	 * service(s) that implement RequestFilter (defined in other modules).
 	 */
-	public void contributeRequestHandler(
-			OrderedConfiguration<RequestFilter> configuration,
-			@Local RequestFilter filter) {
+	public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration, @Local RequestFilter filter) {
 		// Each contribution to an ordered configuration has a name, When
 		// necessary, you may
 		// set constraints to precisely control the invocation order of the
@@ -124,5 +132,31 @@ public class AppModule {
 		// within the pipeline.
 
 		configuration.add("Timing", filter);
+	}
+
+	@Contribute(EntityManagerSource.class)
+	public static void configurePersistenceUnitInfos(MappedConfiguration<String, PersistenceUnitConfigurer> cfg) {
+
+		PersistenceUnitConfigurer configurer = new PersistenceUnitConfigurer() {
+
+			public void configure(TapestryPersistenceUnitInfo unitInfo) {
+
+				unitInfo.addProperty("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
+				unitInfo.addProperty("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/wadisda");
+				unitInfo.addProperty("javax.persistence.jdbc.user", "root");
+				unitInfo.addProperty("javax.persistence.jdbc.password", "root");
+				unitInfo.addManagedClass(User.class);
+				unitInfo.addManagedClass(Attitude.class);
+				unitInfo.addManagedClass(ConversationType.class);
+				unitInfo.addManagedClass(Location.class);
+				unitInfo.addManagedClass(Origin.class);
+				unitInfo.addManagedClass(Presentation.class);
+				unitInfo.addManagedClass(Task.class);
+				unitInfo.addManagedClass(TaskType.class);
+				unitInfo.addManagedClass(UsageType.class);
+			}
+		};
+
+		cfg.add("wadisda-unit", configurer);
 	}
 }

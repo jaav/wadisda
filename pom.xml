@@ -33,9 +33,11 @@
 			<version>${tapestry-release-version}</version>
 		</dependency>
 
-		<!-- Uncomment this to add support for file uploads: <dependency> <groupId>org.apache.tapestry</groupId> 
-			<artifactId>tapestry-upload</artifactId> <version>${tapestry-release-version}</version> 
-			</dependency> -->
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-jpa</artifactId>
+			<version>5.3.6</version>
+		</dependency>
 
 		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
 			plugin (which runs the tests) will fail, preventing Maven from packaging 
@@ -96,6 +98,12 @@
 			<groupId>org.got5</groupId>
 			<artifactId>tapestry5-jquery</artifactId>
 			<version>3.3.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.22</version>
 		</dependency>
 
 	</dependencies>
