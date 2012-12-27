@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.model;
+package be.virtualsushi.wadisda.entities;
 
 import java.util.Date;
 

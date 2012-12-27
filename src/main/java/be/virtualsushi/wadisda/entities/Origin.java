@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.model;
+package be.virtualsushi.wadisda.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

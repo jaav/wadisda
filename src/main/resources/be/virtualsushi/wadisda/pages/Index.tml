@@ -11,6 +11,10 @@
     <t:zone t:id="zone">
         <p>
             You have clicked the link <strong>${clickCount}</strong> times.
+            
+            <t:loop source="relations" value="relation">
+            	<p>${relation.name}</p>
+            </t:loop>
         </p>
 
         <p>

@@ -1,31 +1,44 @@
 package be.virtualsushi.wadisda.services;
 
 import java.io.IOException;
+import java.util.Map;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.persistence.ValidationMode;
+import javax.sql.DataSource;
 
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.apache.tapestry5.ioc.annotations.Local;
+import org.apache.tapestry5.ioc.annotations.Match;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.ioc.services.ApplicationDefaults;
+import org.apache.tapestry5.ioc.services.FactoryDefaults;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
+import org.apache.tapestry5.ioc.services.SymbolSource;
 import org.apache.tapestry5.jpa.EntityManagerSource;
+import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
 import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
+import org.apache.tapestry5.services.ClasspathAssetAliasManager;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
 
-import be.virtualsushi.wadisda.model.Attitude;
-import be.virtualsushi.wadisda.model.ConversationType;
-import be.virtualsushi.wadisda.model.Location;
-import be.virtualsushi.wadisda.model.Origin;
-import be.virtualsushi.wadisda.model.Presentation;
-import be.virtualsushi.wadisda.model.Task;
-import be.virtualsushi.wadisda.model.TaskType;
-import be.virtualsushi.wadisda.model.UsageType;
-import be.virtualsushi.wadisda.model.User;
+import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
+import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
+import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
+
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -35,14 +48,10 @@ import be.virtualsushi.wadisda.model.User;
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
-		// binder.bind(MyServiceInterface.class, MyServiceImpl.class);
-
-		// Make bind() calls on the binder object to define most IoC services.
-		// Use service builder methods (example below) when the implementation
-		// is provided inline, or requires more initialization than simply
-		// invoking the constructor.
+		binder.bind(ListJpaRepository.class, ListJpaRepositoryImpl.class);
 	}
 
+	@FactoryDefaults
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
 		// The application version number is incorprated into URLs for some
 		// assets. Web browsers will cache assets because of the far future
@@ -57,6 +66,7 @@ public class AppModule {
 		configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
 	}
 
+	@ApplicationDefaults
 	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
 		// Contributions to ApplicationDefaults will override any contributions
 		// to
@@ -71,6 +81,12 @@ public class AppModule {
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
 	}
 
+	@Contribute(SymbolSource.class)
+	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> configuration, Logger logger) {
+		configuration.add("ClasspathPropertiesFileSymbolProvider", new ClasspathPropertiesFileSymbolProvider(logger), "after:SystemProperties", "before:ApplicationDefaults");
+	}
+
+	@Contribute(ClasspathAssetAliasManager.class)
 	public static void contributeClasspathAssetAliasManager(MappedConfiguration<String, String> configuration) {
 		configuration.add("bootstrap", "META-INF/resources/webjars/bootstrap/2.2.2");
 	}
@@ -124,7 +140,8 @@ public class AppModule {
 	 * module. Without @Local, there would be an error due to the other
 	 * service(s) that implement RequestFilter (defined in other modules).
 	 */
-	public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration, @Local RequestFilter filter) {
+	@Contribute(RequestHandler.class)
+	public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration, @Local RequestFilter filter) {
 		// Each contribution to an ordered configuration has a name, When
 		// necessary, you may
 		// set constraints to precisely control the invocation order of the
@@ -134,6 +151,27 @@ public class AppModule {
 		configuration.add("Timing", filter);
 	}
 
+	@EagerLoad
+	public DataSource buildDataSource(final Map<String, String> config, @Symbol("jdbc.url") final String jdbcUrl, @Symbol("jdbc.user") final String user, @Symbol("jdbc.password") final String password) throws NamingException {
+
+		final MysqlDataSource dataSource = new MysqlDataSource();
+
+		dataSource.setUrl(jdbcUrl);
+		dataSource.setUser(user);
+		dataSource.setPassword(password);
+
+		final Context initialContext = new InitialContext();
+		try {
+			Context envContext = initialContext.createSubcontext("java:comp/env");
+			Context jdbcContext = envContext.createSubcontext("jdbc");
+			jdbcContext.bind("wadisda_ds", dataSource);
+		} catch (final NamingException ne) {
+			throw new RuntimeException(ne.getExplanation(), ne);
+		}
+
+		return dataSource;
+	}
+
 	@Contribute(EntityManagerSource.class)
 	public static void configurePersistenceUnitInfos(MappedConfiguration<String, PersistenceUnitConfigurer> cfg) {
 
@@ -141,22 +179,19 @@ public class AppModule {
 
 			public void configure(TapestryPersistenceUnitInfo unitInfo) {
 
-				unitInfo.addProperty("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
-				unitInfo.addProperty("javax.persistence.jdbc.url", "jdbc:mysql://localhost:3306/wadisda");
-				unitInfo.addProperty("javax.persistence.jdbc.user", "root");
-				unitInfo.addProperty("javax.persistence.jdbc.password", "root");
-				unitInfo.addManagedClass(User.class);
-				unitInfo.addManagedClass(Attitude.class);
-				unitInfo.addManagedClass(ConversationType.class);
-				unitInfo.addManagedClass(Location.class);
-				unitInfo.addManagedClass(Origin.class);
-				unitInfo.addManagedClass(Presentation.class);
-				unitInfo.addManagedClass(Task.class);
-				unitInfo.addManagedClass(TaskType.class);
-				unitInfo.addManagedClass(UsageType.class);
+				unitInfo.nonJtaDataSource("jdbc/wadisda_ds");
+				unitInfo.addProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+				unitInfo.addProperty("hibernate.hbm2ddl.auto", "update");
+				unitInfo.validationMode(ValidationMode.AUTO);
 			}
 		};
 
 		cfg.add("wadisda-unit", configurer);
 	}
+
+	@Match("*DAO")
+	public static void adviseTransactionally(JpaTransactionAdvisor advisor, MethodAdviceReceiver receiver) {
+		advisor.addTransactionCommitAdvice(receiver);
+	}
+
 }
