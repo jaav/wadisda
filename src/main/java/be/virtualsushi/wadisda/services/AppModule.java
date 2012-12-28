@@ -10,6 +10,7 @@ import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -17,6 +18,7 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.apache.tapestry5.ioc.annotations.Local;
+import org.apache.tapestry5.ioc.annotations.Marker;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
@@ -28,11 +30,15 @@ import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
 import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 import org.apache.tapestry5.services.ClasspathAssetAliasManager;
+import org.apache.tapestry5.services.HttpServletRequestFilter;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
+import org.tynamo.security.Security;
+import org.tynamo.security.services.SecurityFilterChainFactory;
+import org.tynamo.security.services.impl.SecurityFilterChain;
 
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
@@ -192,6 +198,15 @@ public class AppModule {
 	@Match("*DAO")
 	public static void adviseTransactionally(JpaTransactionAdvisor advisor, MethodAdviceReceiver receiver) {
 		advisor.addTransactionCommitAdvice(receiver);
+	}
+
+	@Contribute(HttpServletRequestFilter.class)
+	@Marker(Security.class)
+	public static void setupSecurity(Configuration<SecurityFilterChain> configuration, SecurityFilterChainFactory factory) {
+
+		configuration.add(factory.createChain("/**").add(factory.anon()).build());
+		configuration.add(factory.createChain("/secured/**").add(factory.authc()).build());
+
 	}
 
 }

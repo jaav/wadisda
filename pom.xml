@@ -112,6 +112,18 @@
 			<version>4.1.9.Final</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.tynamo</groupId>
+			<artifactId>tapestry-security</artifactId>
+			<version>0.4.6</version>
+		</dependency>
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.tynamo.security</groupId> -->
+		<!-- <artifactId>tynamo-federatedaccounts-openid</artifactId> -->
+		<!-- <version>0.2.0</version> -->
+		<!-- </dependency> -->
+
 	</dependencies>
 
 	<build>
