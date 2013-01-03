@@ -118,11 +118,29 @@
 			<version>0.4.6</version>
 		</dependency>
 
-		<!-- <dependency> -->
-		<!-- <groupId>org.tynamo.security</groupId> -->
-		<!-- <artifactId>tynamo-federatedaccounts-openid</artifactId> -->
-		<!-- <version>0.2.0</version> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.tynamo.security</groupId>
+			<artifactId>tynamo-federatedaccounts-openid</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.tynamo.security</groupId>
+			<artifactId>tynamo-federatedaccounts-facebook</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.13.2-beta</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson</artifactId>
+			<version>1.13.1-beta</version>
+		</dependency>
 
 	</dependencies>
 
@@ -189,13 +207,13 @@
 	<profiles>
 		<profile>
 			<id>pavel</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<db.url>jdbc:mysql://localhost:3306/wadisda</db.url>
 				<db.user>root</db.user>
 				<db.password>root</db.password>
+				<google.clientId>1062672960315.apps.googleusercontent.com</google.clientId>
+				<google.clientSecret>T6Ai0XdXzkNRSG4UvM0uAzRj</google.clientSecret>
+				<google.redirectUri>http://localhost:8080/oauth2callback</google.redirectUri>
 			</properties>
 		</profile>
 	</profiles>

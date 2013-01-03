@@ -1,0 +1,9 @@
+<html t:type="layout" title="WADISDA Login"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+
+	<t:openid.openidsignin t:provider="google" />
+	
+	<t:facebook.facebookoauthsignin />
+
+</html>

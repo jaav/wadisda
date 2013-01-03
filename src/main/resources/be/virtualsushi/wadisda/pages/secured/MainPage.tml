@@ -1,6 +1,0 @@
-<html t:type="layout" title="Secured page"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-
-	<p>You are on secured page ...</p>
-
-</html>

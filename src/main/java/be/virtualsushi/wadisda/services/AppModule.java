@@ -1,60 +1,45 @@
 package be.virtualsushi.wadisda.services;
 
 import java.io.IOException;
-import java.util.Map;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.ValidationMode;
-import javax.sql.DataSource;
 
 import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
-import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.apache.tapestry5.ioc.annotations.Local;
-import org.apache.tapestry5.ioc.annotations.Marker;
-import org.apache.tapestry5.ioc.annotations.Match;
-import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.FactoryDefaults;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.ioc.services.SymbolSource;
-import org.apache.tapestry5.jpa.EntityManagerSource;
-import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
-import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
-import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 import org.apache.tapestry5.services.ClasspathAssetAliasManager;
-import org.apache.tapestry5.services.HttpServletRequestFilter;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
-import org.tynamo.security.Security;
-import org.tynamo.security.services.SecurityFilterChainFactory;
-import org.tynamo.security.services.impl.SecurityFilterChain;
+import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
+import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
-
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import be.virtualsushi.wadisda.services.repository.impl.UserRepositoryImpl;
+import be.virtualsushi.wadisda.services.security.GoogleFederatedAccountService;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
  * it's a good place to configure and extend Tapestry, or to place your own
  * service definitions.
  */
+@SubModule(value = { PersistenceModule.class, SecurityModule.class })
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(ListJpaRepository.class, ListJpaRepositoryImpl.class);
+		binder.bind(FederatedAccountService.class, GoogleFederatedAccountService.class);
+		binder.bind(UserRepository.class, UserRepositoryImpl.class);
 	}
 
 	@FactoryDefaults
@@ -155,58 +140,6 @@ public class AppModule {
 		// within the pipeline.
 
 		configuration.add("Timing", filter);
-	}
-
-	@EagerLoad
-	public DataSource buildDataSource(final Map<String, String> config, @Symbol("jdbc.url") final String jdbcUrl, @Symbol("jdbc.user") final String user, @Symbol("jdbc.password") final String password) throws NamingException {
-
-		final MysqlDataSource dataSource = new MysqlDataSource();
-
-		dataSource.setUrl(jdbcUrl);
-		dataSource.setUser(user);
-		dataSource.setPassword(password);
-
-		final Context initialContext = new InitialContext();
-		try {
-			Context envContext = initialContext.createSubcontext("java:comp/env");
-			Context jdbcContext = envContext.createSubcontext("jdbc");
-			jdbcContext.bind("wadisda_ds", dataSource);
-		} catch (final NamingException ne) {
-			throw new RuntimeException(ne.getExplanation(), ne);
-		}
-
-		return dataSource;
-	}
-
-	@Contribute(EntityManagerSource.class)
-	public static void configurePersistenceUnitInfos(MappedConfiguration<String, PersistenceUnitConfigurer> cfg) {
-
-		PersistenceUnitConfigurer configurer = new PersistenceUnitConfigurer() {
-
-			public void configure(TapestryPersistenceUnitInfo unitInfo) {
-
-				unitInfo.nonJtaDataSource("jdbc/wadisda_ds");
-				unitInfo.addProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-				unitInfo.addProperty("hibernate.hbm2ddl.auto", "update");
-				unitInfo.validationMode(ValidationMode.AUTO);
-			}
-		};
-
-		cfg.add("wadisda-unit", configurer);
-	}
-
-	@Match("*DAO")
-	public static void adviseTransactionally(JpaTransactionAdvisor advisor, MethodAdviceReceiver receiver) {
-		advisor.addTransactionCommitAdvice(receiver);
-	}
-
-	@Contribute(HttpServletRequestFilter.class)
-	@Marker(Security.class)
-	public static void setupSecurity(Configuration<SecurityFilterChain> configuration, SecurityFilterChainFactory factory) {
-
-		configuration.add(factory.createChain("/**").add(factory.anon()).build());
-		configuration.add(factory.createChain("/secured/**").add(factory.authc()).build());
-
 	}
 
 }
