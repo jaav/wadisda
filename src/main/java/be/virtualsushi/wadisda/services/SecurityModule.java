@@ -41,7 +41,7 @@ public class SecurityModule {
 	}
 	
 	public CredentialStore buildCredentialStore(){
-		
+		return null;
 	}
 	
 }

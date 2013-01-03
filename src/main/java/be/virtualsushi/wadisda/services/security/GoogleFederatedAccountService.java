@@ -19,8 +19,6 @@ public class GoogleFederatedAccountService implements FederatedAccountService {
 	@Override
 	public AuthenticationInfo federate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken, Object remoteAccount) {
 		
-		GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(transport, jsonFactory, clientSecrets, scopes);
-		
 		System.out.println("called");
 		return new SimpleAuthenticationInfo(authenticationToken.getPrincipal(), authenticationToken.getCredentials(), realmName);
 	}
