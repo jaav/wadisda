@@ -142,6 +142,12 @@
 			<version>1.13.1-beta</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-oauth2</artifactId>
+			<version>v2-rev26-1.12.0-beta</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -241,6 +247,10 @@
 			<releases>
 				<enabled>false</enabled>
 			</releases>
+		</repository>
+		<repository>
+			<id>google-api-services</id>
+			<url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
 		</repository>
 	</repositories>
 

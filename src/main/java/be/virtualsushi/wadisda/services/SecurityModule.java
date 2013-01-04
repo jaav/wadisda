@@ -13,9 +13,11 @@ import org.tynamo.security.services.SecurityFilterChainFactory;
 import org.tynamo.security.services.impl.SecurityFilterChain;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.CredentialStore;
+import com.google.api.client.auth.oauth2.MemoryCredentialStore;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.apache.ApacheHttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.common.collect.ImmutableList;
 
@@ -35,13 +37,17 @@ public class SecurityModule {
 		configuration.add(factory.createChain("/**").add(factory.authc()).build());
 	}
 
-	public AuthorizationCodeFlow buildAuthorizationCodeFlow(@Symbol("google.client.id") String clientId, @Symbol("google.client.secret") String clientSecret) {
-		return new GoogleAuthorizationCodeFlow.Builder(new ApacheHttpTransport(), new JacksonFactory(), clientId, clientSecret, ImmutableList.of("https://www.googleapis.com/auth/userinfo.profile",
-				"https://www.googleapis.com/auth/userinfo.email")).setCredentialStore(null).build();
+	public AuthorizationCodeFlow buildAuthorizationCodeFlow(HttpTransport httpTransport, JsonFactory jsonFactory, @Symbol("google.client.id") String clientId, @Symbol("google.client.secret") String clientSecret) {
+		return new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, ImmutableList.of("https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"))
+				.setCredentialStore(new MemoryCredentialStore()).build();
 	}
-	
-	public CredentialStore buildCredentialStore(){
-		return null;
+
+	public HttpTransport buildHttpTRansport() {
+		return new ApacheHttpTransport();
 	}
-	
+
+	public JsonFactory buildJsonFactory() {
+		return new JacksonFactory();
+	}
+
 }

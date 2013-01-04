@@ -1,6 +1,6 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 	xmlns:p="tapestry:parameter">
 	
-	
+	<t:actionlink><img src="${asset:google-icon.png}"/></t:actionlink>
 	
 </t:container>
