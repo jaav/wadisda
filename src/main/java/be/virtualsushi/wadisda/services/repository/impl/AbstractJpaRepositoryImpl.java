@@ -10,14 +10,32 @@ import be.virtualsushi.wadisda.services.repository.BaseJpaRepository;
 
 public abstract class AbstractJpaRepositoryImpl<T extends BaseEntity> extends ListJpaRepositoryImpl implements BaseJpaRepository<T> {
 
+	private Class<T> persistedClass;
+
+	@SuppressWarnings("unchecked")
 	public AbstractJpaRepositoryImpl(EntityManager entityManager) {
 		super(entityManager);
+		persistedClass = (Class<T>) ((ParameterizedType) AbstractJpaRepositoryImpl.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<T> findAll() {
-		return getValuesList((Class<T>) ((ParameterizedType) AbstractJpaRepositoryImpl.this.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+		return getValuesList(persistedClass);
+	}
+
+	@Override
+	public void save(T entity) {
+		getEntityManager().persist(entity);
+	}
+
+	@Override
+	public void delete(T entity) {
+		getEntityManager().detach(entity);
+	}
+
+	@Override
+	public void findOne(Long id) {
+		getEntityManager().find(persistedClass, id);
 	}
 
 }

@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.tynamo.security.federatedaccounts.FederatedAccount.FederatedAccountType;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
+import be.virtualsushi.wadisda.services.security.GoogleAccessToken;
+
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.HttpTransport;
@@ -36,7 +38,9 @@ public class GoogleRealm extends AuthenticatingRealm {
 	private Logger logger;
 
 	public GoogleRealm(Logger logger) {
+		super();
 		this.logger = logger;
+		setAuthenticationTokenClass(GoogleAccessToken.class);
 	}
 
 	@Override

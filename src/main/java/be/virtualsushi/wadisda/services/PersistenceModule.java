@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
+import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.apache.tapestry5.ioc.annotations.Match;
@@ -19,9 +20,19 @@ import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
 import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 
+import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
+import be.virtualsushi.wadisda.services.repository.UserRepository;
+import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
+import be.virtualsushi.wadisda.services.repository.impl.UserRepositoryImpl;
+
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class PersistenceModule {
+
+	public static void bind(ServiceBinder binder) {
+		binder.bind(ListJpaRepository.class, ListJpaRepositoryImpl.class);
+		binder.bind(UserRepository.class, UserRepositoryImpl.class);
+	}
 
 	@EagerLoad
 	public DataSource buildDataSource(final Map<String, String> config, @Symbol("jdbc.url") final String jdbcUrl, @Symbol("jdbc.user") final String user, @Symbol("jdbc.password") final String password) throws NamingException {
@@ -34,7 +45,13 @@ public class PersistenceModule {
 
 		final Context initialContext = new InitialContext();
 		try {
-			Context envContext = initialContext.createSubcontext("java:comp/env");
+			Object context = initialContext.lookup("java:comp/env");
+			Context envContext = null;
+			if (context != null) {
+				envContext = (Context) context;
+			} else {
+				envContext = initialContext.createSubcontext("java:comp/env");
+			}
 			Context jdbcContext = envContext.createSubcontext("jdbc");
 			jdbcContext.bind("wadisda_ds", dataSource);
 		} catch (final NamingException ne) {

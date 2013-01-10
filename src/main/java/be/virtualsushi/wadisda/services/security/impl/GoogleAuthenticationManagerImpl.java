@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.ioc.annotations.PostInjection;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
 
@@ -29,14 +30,22 @@ public class GoogleAuthenticationManagerImpl implements GoogleAuthenticationMana
 	@Inject
 	private LinkSource linkSource;
 
+	private String redirectUrl;
+
 	public GoogleAuthenticationManagerImpl(Logger logger) {
 		this.logger = logger;
+	}
+
+	@PostInjection
+	public void init() {
+		redirectUrl = linkSource.createPageRenderLink("oauth2callback", false).toAbsoluteURI();
 	}
 
 	@Override
 	public void requestAuthorization() {
 		try {
-			response.sendRedirect(authorizationCodeFlow.newAuthorizationUrl().setRedirectUri(linkSource.createPageRenderLink("oauth2callback", false).toAbsoluteURI()).build());
+			response.sendRedirect(authorizationCodeFlow.newAuthorizationUrl().setRedirectUri(redirectUrl).build());
+
 		} catch (IOException e) {
 			logger.error("Unable to request google authorization.", e);
 		}
@@ -45,7 +54,7 @@ public class GoogleAuthenticationManagerImpl implements GoogleAuthenticationMana
 	@Override
 	public void authenticate(String userId) {
 		try {
-			TokenResponse token = authorizationCodeFlow.newTokenRequest(userId).execute();
+			TokenResponse token = authorizationCodeFlow.newTokenRequest(userId).setRedirectUri(redirectUrl).setGrantType("authorization_code").execute();
 			Credential credential = authorizationCodeFlow.createAndStoreCredential(token, userId);
 			SecurityUtils.getSubject().login(new GoogleAccessToken(userId, credential));
 		} catch (IOException e) {

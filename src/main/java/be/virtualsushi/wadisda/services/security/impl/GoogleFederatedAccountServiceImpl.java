@@ -7,7 +7,10 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
+import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
+
+import com.google.api.services.oauth2.model.Userinfo;
 
 public class GoogleFederatedAccountServiceImpl implements FederatedAccountService {
 
@@ -16,9 +19,16 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 
 	@Override
 	public AuthenticationInfo federate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken, Object remoteAccount) {
-
-		System.out.println("called");
-		return new SimpleAuthenticationInfo(authenticationToken.getPrincipal(), authenticationToken.getCredentials(), realmName);
+		Userinfo userInfo = (Userinfo) remoteAccount;
+		User user = userRepository.findByEmail(userInfo.getEmail());
+		if (user == null) {
+			user = new User();
+			user.setEmail(userInfo.getEmail());
+			user.setName(userInfo.getName());
+			user.setAvatarUrl(userInfo.getPicture());
+			userRepository.save(user);
+		}
+		return new SimpleAuthenticationInfo(user, authenticationToken.getCredentials(), realmName);
 	}
 
 }

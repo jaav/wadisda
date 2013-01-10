@@ -2,7 +2,6 @@ package be.virtualsushi.wadisda.services;
 
 import java.io.IOException;
 
-import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
@@ -20,17 +19,8 @@ import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
-import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
-import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
-import be.virtualsushi.wadisda.services.repository.UserRepository;
-import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
-import be.virtualsushi.wadisda.services.repository.impl.UserRepositoryImpl;
-import be.virtualsushi.wadisda.services.security.GoogleAuthenticationManager;
-import be.virtualsushi.wadisda.services.security.impl.GoogleAuthenticationManagerImpl;
-import be.virtualsushi.wadisda.services.security.impl.GoogleFederatedAccountServiceImpl;
-import be.virtualsushi.wadisda.services.security.impl.GoogleRealm;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -41,11 +31,7 @@ import be.virtualsushi.wadisda.services.security.impl.GoogleRealm;
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
-		binder.bind(ListJpaRepository.class, ListJpaRepositoryImpl.class);
-		binder.bind(FederatedAccountService.class, GoogleFederatedAccountServiceImpl.class);
-		binder.bind(UserRepository.class, UserRepositoryImpl.class);
-		binder.bind(GoogleAuthenticationManager.class, GoogleAuthenticationManagerImpl.class);
-		binder.bind(AuthenticatingRealm.class, GoogleRealm.class);
+
 	}
 
 	@FactoryDefaults
