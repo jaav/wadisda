@@ -1,5 +1,67 @@
-<html  xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"> 
-<body>
+<!DOCTYPE html>
+<html t:type="layout" title="${message:new.registration}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-</body>
+	<t:form class="form-horizontal">
+		<div class="control-group">
+			<t:datefield value="registration.epoch" class="span2"
+				placeholder="message:date" />
+			<t:textfield value="epochTime" class="span1" placeholder="message:time" />
+			<t:textfield value="registration.duration" class="span1"
+				placeholder="message:duration" />
+		</div>
+		
+		<div class="control-group">
+			<t:select value="registration.conversationType" model="getSelectModel('ConversationType')"
+				blankOption="never" class="span3" />
+		</div>
+		
+		<div class="control-group">
+			<t:textarea value="registration.question" class="span9" placeholder="message:question"/>
+		</div>
+		
+		<div class="control-group">
+			<div class="span4">
+				<t:select value="registration.gender" class="span6" blankLabel="message:gender" />
+				<t:textfield value="registration.age" placeholder="message:age" class="span3" />
+			</div>
+			<label class="checkbox inline offset1">
+				<t:checkbox value="registration.hasViolence" />${message:hasViolence}
+			</label>
+		</div>
+		
+		<div class="control-group">
+			<div class="span4">
+				<t:textfield value="registrationZipCode" class="span3" placeholder="message:zip.code"/>
+				<t:textfield value="registrationLocation" class="span9" placeholder="message:location"/>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<div class="span4">
+				<t:select value="registration.presentation" model="getSelectModel('Presentation')" blankOption="never" class="span6"/>
+			</div>
+			<t:select value="registrationRelation" model="getSelectModel('Relation')" blankOption="never" class="offset1"/>
+			<t:actionlink style="margin-left:1%;">${message:add.relation}</t:actionlink>
+		</div>
+		
+		<div class="control-group">
+			<div class="span4">
+				<t:select value="registrationProduct" model="getSelectModel('Product')" blankOption="never" class="span6"/>
+				<t:actionlink style="margin-left:3%;margin-right:0.99%;">${message:add.product}</t:actionlink>
+			</div>
+			<t:select value="registrationReferer" model="getSelectModel('Referer')" blankOption="never" class="offset1"/>
+			<t:actionlink style="margin-left:1%;">${message:add.referer}</t:actionlink>
+		</div>
+		
+		<div class="control-group">
+			<div class="span4">
+				<t:select value="registrationProductQuestion" model="getSelectModel('ProductQuestion','question')" blankOption="never" class="span6"/>
+				<t:actionlink style="margin-left:3%;margin-right:0.99%;">${message:add.product.question}</t:actionlink>
+			</div>
+			<t:select value="registrationSocialContext" model="getSelectModel('SocialContext')" blankOption="never" class="offset1"/>
+			<t:actionlink style="margin-left:1%;">${message:add.social.context}</t:actionlink>
+		</div>
+	</t:form>
+
 </html>

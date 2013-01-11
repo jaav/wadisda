@@ -141,6 +141,12 @@
 			<artifactId>google-api-services-oauth2</artifactId>
 			<version>v2-rev26-1.12.0-beta</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
 
 	</dependencies>
 

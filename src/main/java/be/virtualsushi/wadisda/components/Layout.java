@@ -1,8 +1,9 @@
 package be.virtualsushi.wadisda.components;
 
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.annotations.Import;
@@ -26,17 +27,6 @@ public class Layout {
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
 	private String title;
 
-	@Property
-	private String pageName;
-
-	@Property
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private String sidebarTitle;
-
-	@Property
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private Block sidebar;
-
 	@Inject
 	private ComponentResources resources;
 
@@ -45,15 +35,21 @@ public class Layout {
 	@Symbol(SymbolConstants.APPLICATION_VERSION)
 	private String appVersion;
 
-	public String getClassForPageName() {
-		return resources.getPageName().equalsIgnoreCase(pageName) ? "active" : null;
-	}
-
-	public String[] getPageNames() {
-		return new String[] { "Index", "About", "Contact" };
-	}
-
 	public User getCurrentUser() {
 		return (User) SecurityUtils.getSubject().getPrincipal();
 	}
+
+	public String getMenuItemClass(String itemName) {
+		return resources.getPageName().equalsIgnoreCase(itemName) ? "active" : "";
+	}
+
+	public String getMenuCategoryClass(List<String> categoryItems) {
+		for (String item : categoryItems) {
+			if (resources.getPageName().equalsIgnoreCase(item)) {
+				return "in";
+			}
+		}
+		return "";
+	}
+
 }

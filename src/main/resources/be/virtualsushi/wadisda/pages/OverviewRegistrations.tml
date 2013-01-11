@@ -1,5 +1,6 @@
-<html  xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"> 
-<body>
+<!DOCTYPE html>
+<html t:type="layout" title="${message:overview.registrations}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
 
-</body>
 </html>

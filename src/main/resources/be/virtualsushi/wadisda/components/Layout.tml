@@ -3,7 +3,19 @@
 	xmlns:p="tapestry:parameter">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>${title}</title>
+		<title>${message:app.title}: ${title}</title>
+		<style>
+			input[class*="span"],
+			select[class*="span"],
+			textarea[class*="span"],
+			.uneditable-input[class*="span"],
+			.row-fluid input[class*="span"],
+			.row-fluid select[class*="span"],
+			.row-fluid textarea[class*="span"],
+			.row-fluid .uneditable-input[class*="span"] {
+				margin-left: 2.5641%;
+			}
+		</style>
 	</head>
 	<body style="padding: 25px;">
 		<t:wadisdaheader t:containerClass="container-fluid" />
@@ -25,10 +37,10 @@
 
 					<div class="well" style="padding: 8px 0;">
 						<ul class="nav nav-list">
-							<li>
-								<a href="#">
+							<li class="${getMenuItemClass('index')}">
+								<t:pagelink page="index">
 									<i class="icon-home" />&nbsp;Dashboard
-								</a>
+								</t:pagelink>
 							</li>
 							<li>
 								<a href="#">
@@ -49,18 +61,20 @@
 							<div class="accordion-heading">
 								<a class="accordion-toggle" data-toggle="collapse"
 									data-parent="#accordion" href="#collapse0">
-									<i class="icon-edit" />&nbsp;${message:register}<i class="icon-chevron-down" style="float:right;"/>
+									<i class="icon-edit" />&nbsp;${message:register}
+									<i class="icon-chevron-down" style="float:right;" />
 								</a>
 							</div>
-							<div id="collapse0" class="accordion-body collapse">
+							<div id="collapse0"
+								class="accordion-body collapse ${getMenuCategoryClass(['newRegistration','overviewRegistrations'])}">
 								<div class="accordion-inner">
 									<ul class="nav nav-list">
-										<li>
+										<li class="${getMenuItemClass('newRegistration')}">
 											<t:pagelink page="newRegistration">
 												<i class="icon-chevron-right" />&nbsp;${message:new}
 											</t:pagelink>
 										</li>
-										<li>
+										<li class="${getMenuItemClass('overviewRegistrations')}">
 											<t:pagelink page="overviewRegistrations">
 												<i class="icon-chevron-right" />&nbsp;${message:overview}
 											</t:pagelink>
@@ -74,6 +88,7 @@
 								<a class="accordion-toggle" data-toggle="collapse"
 									data-parent="#accordion" href="#collapse1">
 									<i class="icon-barcode" />&nbsp;${message:products}
+									<i class="icon-chevron-down" style="float:right;" />
 								</a>
 							</div>
 							<div id="collapse1" class="accordion-body collapse">
@@ -98,6 +113,7 @@
 								<a class="accordion-toggle" data-toggle="collapse"
 									data-parent="#accordion" href="#collapse2">
 									<i class="icon-envelope" />&nbsp;${message:addresses}
+									<i class="icon-chevron-down" style="float:right;" />
 								</a>
 							</div>
 							<div id="collapse2" class="accordion-body collapse">
@@ -122,6 +138,7 @@
 								<a class="accordion-toggle" data-toggle="collapse"
 									data-parent="#accordion" href="#collapse3">
 									<i class="icon-flag" />&nbsp;${message:ews}
+									<i class="icon-chevron-down" style="float:right;" />
 								</a>
 							</div>
 							<div id="collapse3" class="accordion-body collapse">
@@ -146,6 +163,7 @@
 								<a class="accordion-toggle" data-toggle="collapse"
 									data-parent="#accordion" href="#collapse4">
 									<i class="icon-fire" />&nbsp;${message:violence}
+									<i class="icon-chevron-down" style="float:right;" />
 								</a>
 							</div>
 							<div id="collapse4" class="accordion-body collapse">
@@ -168,16 +186,17 @@
 					</div>
 					<hr />
 					<div class="btn-toolbar">
-						<a class="btn btn-info"><i class="icon-print icon-white"/>&nbsp;${message:print}</a>
-						<a class="btn btn-info"><i class="icon-share-alt icon-white"/>&nbsp;${message:export}</a>
+						<a class="btn btn-info">
+							<i class="icon-print icon-white" />&nbsp;${message:print}
+						</a>
+						<a class="btn btn-info">
+							<i class="icon-share-alt icon-white" />&nbsp;${message:export}
+						</a>
 					</div>
 				</div>
 				<div class="span9">
-					<h1>
-						<t:pagelink page="index">be.virtualsushi.wadisda:wadisda
-						</t:pagelink>
-	                    &nbsp;
-						version ${appVersion}
+					<h1 class="page-header">
+						${title}
 					</h1>
 					<t:body />
 				</div>

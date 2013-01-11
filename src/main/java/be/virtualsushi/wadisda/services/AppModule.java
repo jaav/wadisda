@@ -3,6 +3,7 @@ package be.virtualsushi.wadisda.services;
 import java.io.IOException;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.Translator;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -18,9 +19,14 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
+import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.services.TranslatorSource;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
+import be.virtualsushi.wadisda.services.impl.CustomSelectModelFactoryImpl;
+import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
+import be.virtualsushi.wadisda.valueobjects.TimeValue;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -31,7 +37,7 @@ import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvid
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
-
+		binder.bind(SelectModelFactory.class, CustomSelectModelFactoryImpl.class).withId("customSelectModelFactory");
 	}
 
 	@FactoryDefaults
@@ -132,6 +138,11 @@ public class AppModule {
 		// within the pipeline.
 
 		configuration.add("Timing", filter);
+	}
+
+	@Contribute(TranslatorSource.class)
+	public static void contributeTranslatorSource(MappedConfiguration<Class<?>, Translator<?>> configuration) {
+		configuration.add(TimeValue.class, new TimeValueTranslator());
 	}
 
 }
