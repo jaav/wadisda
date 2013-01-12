@@ -34,8 +34,8 @@ public abstract class AbstractJpaRepositoryImpl<T extends BaseEntity> extends Li
 	}
 
 	@Override
-	public void findOne(Long id) {
-		getEntityManager().find(persistedClass, id);
+	public T findOne(Long id) {
+		return getEntityManager().find(persistedClass, id);
 	}
 
 }

@@ -65,4 +65,8 @@ public class BaseEntity implements Serializable {
 		return true;
 	}
 
+	public boolean isNew() {
+		return id == null || id == 0;
+	}
+
 }

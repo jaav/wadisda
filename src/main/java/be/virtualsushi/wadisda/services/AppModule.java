@@ -19,12 +19,10 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
-import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.TranslatorSource;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
-import be.virtualsushi.wadisda.services.impl.CustomSelectModelFactoryImpl;
 import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
 import be.virtualsushi.wadisda.valueobjects.TimeValue;
 
@@ -37,7 +35,7 @@ import be.virtualsushi.wadisda.valueobjects.TimeValue;
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
-		binder.bind(SelectModelFactory.class, CustomSelectModelFactoryImpl.class).withId("customSelectModelFactory");
+
 	}
 
 	@FactoryDefaults

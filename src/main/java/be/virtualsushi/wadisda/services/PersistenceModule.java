@@ -21,8 +21,10 @@ import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
+import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
+import be.virtualsushi.wadisda.services.repository.impl.RegistrationRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.UserRepositoryImpl;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
@@ -32,6 +34,7 @@ public class PersistenceModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(ListJpaRepository.class, ListJpaRepositoryImpl.class);
 		binder.bind(UserRepository.class, UserRepositoryImpl.class);
+		binder.bind(RegistrationRepository.class, RegistrationRepositoryImpl.class);
 	}
 
 	@EagerLoad

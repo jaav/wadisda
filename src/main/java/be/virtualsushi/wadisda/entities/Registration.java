@@ -1,6 +1,7 @@
 package be.virtualsushi.wadisda.entities;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -48,7 +49,7 @@ public class Registration extends BaseEntity {
 	@Column(name = "age")
 	private Integer age;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "location")
 	private Location location;
 
@@ -294,4 +295,65 @@ public class Registration extends BaseEntity {
 	public void setOrigin(Origin origin) {
 		this.origin = origin;
 	}
+
+	public void addRelation(Relation relation) {
+		if (relation == null) {
+			return;
+		}
+		if (relations == null) {
+			relations = new HashSet<Relation>();
+		}
+		if (!relations.contains(relation)) {
+			relations.add(relation);
+		}
+	}
+
+	public void addReferer(Referer referer) {
+		if (referer == null) {
+			return;
+		}
+		if (referers == null) {
+			referers = new HashSet<Referer>();
+		}
+		if (!referers.contains(referer)) {
+			referers.add(referer);
+		}
+	}
+
+	public void addProduct(Product product) {
+		if (product == null) {
+			return;
+		}
+		if (products == null) {
+			products = new HashSet<Product>();
+		}
+		if (!products.contains(product)) {
+			products.add(product);
+		}
+	}
+
+	public void addProductgQuestion(ProductQuestion productQuestion) {
+		if (productQuestion == null) {
+			return;
+		}
+		if (productQuestions == null) {
+			productQuestions = new HashSet<ProductQuestion>();
+		}
+		if (!productQuestions.contains(productQuestion)) {
+			productQuestions.add(productQuestion);
+		}
+	}
+
+	public void addSocialContext(SocialContext socialContext) {
+		if (socialContext == null) {
+			return;
+		}
+		if (socialContexts == null) {
+			socialContexts = new HashSet<SocialContext>();
+		}
+		if (!socialContexts.contains(socialContext)) {
+			socialContexts.add(socialContext);
+		}
+	}
+
 }
