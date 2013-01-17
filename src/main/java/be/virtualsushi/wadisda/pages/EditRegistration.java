@@ -16,9 +16,9 @@ import be.virtualsushi.wadisda.entities.Referer;
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.Relation;
 import be.virtualsushi.wadisda.entities.SocialContext;
+import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
-import be.virtualsushi.wadisda.valueobjects.TimeValue;
 
 public class EditRegistration {
 

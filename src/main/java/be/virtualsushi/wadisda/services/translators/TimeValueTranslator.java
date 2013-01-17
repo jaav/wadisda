@@ -6,7 +6,7 @@ import org.apache.tapestry5.ValidationException;
 import org.apache.tapestry5.internal.translator.AbstractTranslator;
 import org.apache.tapestry5.services.FormSupport;
 
-import be.virtualsushi.wadisda.valueobjects.TimeValue;
+import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 
 public class TimeValueTranslator extends AbstractTranslator<TimeValue> {
 

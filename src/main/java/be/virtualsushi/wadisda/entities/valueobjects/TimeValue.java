@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.valueobjects;
+package be.virtualsushi.wadisda.entities.valueobjects;
 
 import java.util.Calendar;
 import java.util.Date;

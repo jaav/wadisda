@@ -15,9 +15,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.Validate;
 import org.hibernate.annotations.Type;
 
 import be.virtualsushi.wadisda.entities.enums.Genders;
+import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 
 @Entity
 @Table(name = "registration")
@@ -25,6 +27,7 @@ public class Registration extends BaseEntity {
 
 	private static final long serialVersionUID = -4718943812734144874L;
 
+	@Validate("required")
 	@Column(name = "epoch")
 	private Date epoch;
 
@@ -354,6 +357,10 @@ public class Registration extends BaseEntity {
 		if (!socialContexts.contains(socialContext)) {
 			socialContexts.add(socialContext);
 		}
+	}
+
+	public TimeValue getTime() {
+		return TimeValue.of(epoch);
 	}
 
 }

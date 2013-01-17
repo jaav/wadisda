@@ -22,9 +22,9 @@ import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.TranslatorSource;
 import org.slf4j.Logger;
 
+import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
-import be.virtualsushi.wadisda.valueobjects.TimeValue;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
