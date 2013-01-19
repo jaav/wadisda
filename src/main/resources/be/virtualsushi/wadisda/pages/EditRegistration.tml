@@ -1,116 +1,118 @@
 <!DOCTYPE html>
-<html t:type="layout" title="${message:new.registration}"
+<t:layout title="${message:new.registration}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-	<t:form class="form-horizontal">
-		<div class="control-group">
-			<t:datefield value="registration.epoch" class="span2"
-				placeholder="message:date" />
-			<t:textfield value="epochTime" class="span1" placeholder="message:time" />
-			<t:textfield value="registration.duration" class="span1"
-				placeholder="message:duration" />
-		</div>
-
-		<div class="control-group">
-			<t:select value="registration.conversationType" model="getSelectModel('ConversationType')"
-				blankLabel="message:conversationtype" class="span3" />
-		</div>
-
-		<div class="control-group">
-			<t:textarea value="registration.question" class="span9"
-				placeholder="message:question" />
-		</div>
-
-		<div class="control-group">
-			<div class="span4">
-				<t:select value="registration.gender" class="span6"
-					blankLabel="message:gender" />
-				<t:textfield value="registration.age" placeholder="message:age"
-					class="span3" />
+	<t:zone t:id="modalZone" update="show" >
+		<t:form class="form-horizontal" t:zone="^">
+			<t:errors />
+			
+			<div class="control-group">
+				<t:datefield value="registration.epoch" class="span2" placeholder="message:date" />
+				<t:textfield value="epochTime" class="span1" placeholder="message:time" />
+				<t:textfield value="registration.duration" class="span1" placeholder="message:duration" />
 			</div>
-			<label class="checkbox inline offset1">
-				<t:checkbox value="registration.hasViolence" />
-				${message:hasViolence}
-			</label>
-		</div>
-
-		<div class="control-group">
-			<div class="span4">
-				<t:textfield value="registrationZipCode" class="span3"
-					placeholder="message:zip.code" />
-				<t:textfield value="registrationLocation" class="span9"
-					placeholder="message:location" />
+	
+			<div class="control-group">
+				<t:select value="registration.conversationType" model="getSelectModel('ConversationType')" blankLabel="message:conversationtype" class="span3" />
 			</div>
-		</div>
-
-		<div class="control-group">
-			<div class="span4">
-				<t:select value="registration.presentation" model="getSelectModel('Presentation')"
-					blankLabel="message:presentation" class="span6" />
+	
+			<div class="control-group">
+				<t:textarea value="registration.question" class="span9" placeholder="message:question" />
 			</div>
-			<t:select value="registrationRelation" model="getSelectModel('Relation')"
-				blankLabel="message:relation" class="offset1" />
-			<t:actionlink style="margin-left:1%;">${message:add.relation}
-			</t:actionlink>
-		</div>
-
-		<div class="control-group">
-			<div class="span4">
-				<t:select value="registrationProduct" model="getSelectModel('Product')"
-					blankLabel="message:product" class="span6" />
-				<t:actionlink style="margin-left:3%;margin-right:0.99%;">${message:add.product}
-				</t:actionlink>
+	
+			<div class="control-group">
+				<div class="span4">
+					<t:select value="registration.gender" class="span6" blankLabel="message:gender" />
+					<t:textfield value="registration.age" placeholder="message:age" class="span3" />
+				</div>
+				<label class="checkbox inline offset1">
+					<t:checkbox value="registration.hasViolence" />
+					${message:hasViolence}
+				</label>
 			</div>
-			<t:select value="registrationReferer" model="getSelectModel('Referer')"
-				blankLabel="message:referer" class="offset1" />
-			<t:actionlink style="margin-left:1%;">${message:add.referer}
-			</t:actionlink>
-		</div>
-
-		<div class="control-group">
-			<div class="span4">
-				<t:select value="registrationProductQuestion"
-					model="getSelectModel('ProductQuestion','question')" blankLabel="message:productquestion"
-					class="span6" />
-				<t:actionlink style="margin-left:3%;margin-right:0.99%;">${message:add.product.question}
-				</t:actionlink>
-			</div>
-			<t:select value="registrationSocialContext" model="getSelectModel('SocialContext')"
-				blankLabel="message:socialcontext" class="offset1" />
-			<t:actionlink style="margin-left:1%;">${message:add.social.context}
-			</t:actionlink>
-		</div>
-
-		<div class="control-group">
-			<div class="span4">
-				<t:select value="registration.questionType" model="getSelectModel('QuestionType')"
-					blankLabel="message:questiontype" class="span12" />
-			</div>
-			<t:select value="registration.origin" model="getSelectModel('Origin')"
-				blankLabel="message:origin" class="offset1" />
-		</div>
-		
-		<div class="control-group">
-			<div class="bs-docs-example span9" style="margin-left:0;">
-				<h6>${message:third.party.person.title}</h6>
-				<hr />
-				<div class="control-group">
-					<t:select value="registration.tpGender" blankLabel="message:gender" />
-					<t:textfield value="registration.tpAge" placeholder="message:age"
-						class="span1" />
-					<t:select value="registration.tpUsageType" model="getSelectModel('UsageType')"
-						blankLabel="message:usagetype" class="span4" />
+	
+			<div class="control-group">
+				<div class="span4">
+					<t:textfield value="registrationZipCode" class="span3" placeholder="message:zip.code" />
+					<t:textfield value="registrationLocation" class="span9" placeholder="message:location" />
 				</div>
 			</div>
-		</div>
-
-		<div class="form-actions span9 controls-row" style="margin-left:0;">
-			<div class="btn-toolbar" style="float:right;">
-				<button type="button" class="btn">${message:cancel}</button>
-				<button type="submit" class="btn btn-primary">${message:save}</button>
+	
+			<div class="control-group">
+				<div class="span4">
+					<t:select value="registration.presentation" model="getSelectModel('Presentation')" blankLabel="message:presentation" class="span6" />
+				</div>
+				<t:select value="registrationRelation" model="getSelectModel('Relation')" blankLabel="message:relation" class="offset1" />
+				<t:actionlink style="margin-left:1%;">${message:add.relation}</t:actionlink>
 			</div>
-		</div>
+	
+			<div class="control-group">
+				<div class="span4">
+					<t:select value="registrationProduct" model="getSelectModel('Product')" blankLabel="message:product" class="span6" />
+					<t:actionlink t:id="addProduct" style="margin-left:3%;margin-right:0.99%;">${message:add.product}</t:actionlink>
+				</div>
+				<t:select value="registrationReferer" model="getSelectModel('Referer')" blankLabel="message:referer" class="offset1" />
+				<t:actionlink style="margin-left:1%;">${message:add.referer}</t:actionlink>
+			</div>
+	
+			<div class="control-group">
+				<div class="span4">
+					<t:select value="registrationProductQuestion" model="getSelectModel('ProductQuestion','question')" blankLabel="message:productquestion"	class="span6" />
+					<t:actionlink style="margin-left:3%;margin-right:0.99%;">${message:add.product.question}</t:actionlink>
+				</div>
+				<t:select value="registrationSocialContext" model="getSelectModel('SocialContext')"	blankLabel="message:socialcontext" class="offset1" />
+				<t:actionlink style="margin-left:1%;">${message:add.social.context}</t:actionlink>
+			</div>
+	
+			<div class="control-group">
+				<div class="span4">
+					<t:select value="registration.questionType" model="getSelectModel('QuestionType')" blankLabel="message:questiontype" class="span12" />
+				</div>
+				<t:select value="registration.origin" model="getSelectModel('Origin')" blankLabel="message:origin" class="offset1" />
+			</div>
+			
+			<div class="control-group">
+				<div class="bs-docs-example span9" style="margin-left:0;">
+					<h6>${message:third.party.person.title}</h6>
+					<hr />
+					<div class="control-group">
+						<t:select value="registration.tpGender" blankLabel="message:gender" />
+						<t:textfield value="registration.tpAge" placeholder="message:age" class="span1" />
+						<t:select value="registration.tpUsageType" model="getSelectModel('UsageType')" blankLabel="message:usagetype" class="span4" />
+					</div>
+				</div>
+			</div>
+	
+			<div class="form-actions span9 controls-row" style="margin-left:0;">
+				<div class="btn-toolbar" style="float:right;">
+					<button type="button" class="btn" >${message:cancel}</button>
+					<button type="submit" class="btn btn-primary">${message:save}</button>
+				</div>
+			</div>
+			
+			<div id="dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+				<div class="modal-header">
+					<h3 id="dialogLabel">${message:registration.saved}</h3>
+				</div>
+				<div class="modal-body">
+					<ul class="nav nav-list">
+						<li>
+							<t:actionlink t:id="sendEmail">${message:send.email}</t:actionlink>
+						</li>
+						<li>
+							<t:actionlink t:id="addAgenda">${message:add.agenda}</t:actionlink>
+						</li>
+						<li>
+							<t:actionlink t:id="addEvent">${message:add.event}</t:actionlink>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<t:pagelink class="btn btn-primary" page="overviewRegistrations" >${message:finish}</t:pagelink>			
+				</div>
+			</div>
+	
+		</t:form>
+	</t:zone>
 
-	</t:form>
-
-</html>
+</t:layout>

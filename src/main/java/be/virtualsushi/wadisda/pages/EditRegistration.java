@@ -5,9 +5,17 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import be.virtualsushi.wadisda.entities.Location;
 import be.virtualsushi.wadisda.entities.Product;
@@ -31,6 +39,9 @@ public class EditRegistration {
 	@Inject
 	private RegistrationRepository registrationRepository;
 
+	@Inject
+	private Request request;
+
 	@Property
 	private String registrationZipCode;
 
@@ -40,6 +51,13 @@ public class EditRegistration {
 	@Property
 	private Registration registration;
 
+	@Environmental
+	private JavaScriptSupport javaScriptSupport;
+
+	@InjectComponent
+	private Zone modalZone;
+
+	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String context) {
 		try {
 			registration = registrationRepository.findOne(Long.parseLong(context));
@@ -52,11 +70,13 @@ public class EditRegistration {
 		}
 	}
 
+	@OnEvent(value = EventConstants.PASSIVATE)
 	public String onPassivate() {
 		return registration.isNew() ? "new" : String.valueOf(registration.getId());
 	}
 
 	public Object onSuccess() {
+
 		if (registration.getLocation() == null) {
 			if (StringUtils.isNotBlank(registrationLocation) || StringUtils.isNotBlank(registrationZipCode)) {
 				Location location = new Location();
@@ -68,8 +88,21 @@ public class EditRegistration {
 			registration.getLocation().setName(registrationLocation);
 			registration.getLocation().setZipCode(registrationZipCode);
 		}
+		boolean isNew = registration.isNew();
 		registrationRepository.save(registration);
-		return OverviewRegistrations.class;
+		if (isNew) {
+			registration.setId(0l);
+		}
+		if (request.isXHR()) {
+			return modalZone;
+		} else {
+			return OverviewRegistrations.class;
+		}
+	}
+
+	@AfterRender
+	public void afterRender() {
+		javaScriptSupport.addScript("$('#%s').bind(Tapestry.ZONE_UPDATED_EVENT, function(){$('#dialog').modal();});", modalZone.getClientId());
 	}
 
 	public TimeValue getEpochTime() {

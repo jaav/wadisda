@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.apache.tapestry5.beaneditor.Validate;
 import org.hibernate.annotations.Type;
 
 import be.virtualsushi.wadisda.entities.enums.Genders;
@@ -27,7 +26,6 @@ public class Registration extends BaseEntity {
 
 	private static final long serialVersionUID = -4718943812734144874L;
 
-	@Validate("required")
 	@Column(name = "epoch")
 	private Date epoch;
 

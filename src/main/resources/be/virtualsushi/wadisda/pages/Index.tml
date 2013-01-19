@@ -3,13 +3,19 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
         <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
+        
+    <script>
+    	
+    	
+    
+    </script>
 
     <p>${message:greeting}</p>
 
     <p>The current time is: <strong>${currentTime}</strong></p>
 
     <!-- A Zone is a component that can be updated in place, triggered by other components. -->
-    <t:zone t:id="zone">
+    <t:zone t:id="zone" id="zone" >
         <p>
             You have clicked the link <strong>${clickCount}</strong> times.
             
@@ -28,6 +34,28 @@
             ]
         </p>
 
+
+		<div id="dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
+				<div class="modal-header">
+					<h3 id="dialogLabel">${message:registration.saved}</h3>
+				</div>
+				<div class="modal-body">
+					<ul>
+						<li>
+							<t:actionlink t:id="sendEmail">${message:send.email}</t:actionlink>
+						</li>
+						<li>
+							<t:actionlink t:id="addAgenda">${message:add.agenda}</t:actionlink>
+						</li>
+						<li>
+							<t:actionlink t:id="addEvent">${message:add.event}</t:actionlink>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<t:pagelink class="btn btn-primary" page="overviewRegistrations" >${message:finish}</t:pagelink>			
+				</div>
+			</div>
     </t:zone>
 
 </html>
