@@ -36,7 +36,13 @@
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-jpa</artifactId>
-			<version>5.3.6</version>
+			<version>${tapestry-release-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-beanvalidator</artifactId>
+			<version>${tapestry-release-version}</version>
 		</dependency>
 
 		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
@@ -113,6 +119,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
 			<version>0.4.6</version>
@@ -125,11 +137,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
 			<version>1.13.2-beta</version>
 		</dependency>
 
+		<!-- Google APIs libraries dependencies -->
 		<dependency>
 			<groupId>com.google.http-client</groupId>
 			<artifactId>google-http-client-jackson</artifactId>
@@ -141,11 +160,17 @@
 			<artifactId>google-api-services-oauth2</artifactId>
 			<version>v2-rev26-1.12.0-beta</version>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-tasks</artifactId>
+			<version>v1-rev6-1.13.2-beta</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-calendar</artifactId>
+			<version>v3-rev22-1.13.2-beta</version>
 		</dependency>
 
 	</dependencies>

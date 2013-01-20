@@ -30,6 +30,9 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.apache.ApacheHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.oauth2.Oauth2Scopes;
+import com.google.api.services.tasks.TasksScopes;
 import com.google.common.collect.ImmutableList;
 
 public class SecurityModule {
@@ -60,7 +63,7 @@ public class SecurityModule {
 	}
 
 	public AuthorizationCodeFlow buildAuthorizationCodeFlow(HttpTransport httpTransport, JsonFactory jsonFactory, @Symbol("google.client.id") String clientId, @Symbol("google.client.secret") String clientSecret) {
-		return new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, ImmutableList.of("https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"))
+		return new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, ImmutableList.of(Oauth2Scopes.USERINFO_EMAIL, Oauth2Scopes.USERINFO_PROFILE, CalendarScopes.CALENDAR, TasksScopes.TASKS))
 				.setCredentialStore(new MemoryCredentialStore()).build();
 	}
 

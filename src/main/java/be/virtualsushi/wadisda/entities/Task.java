@@ -4,7 +4,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
+
+import be.virtualsushi.wadisda.entities.enums.TaskStatuses;
+import be.virtualsushi.wadisda.entities.enums.TaskTypes;
 
 @Entity
 @Table(name = "task")
@@ -34,10 +39,12 @@ public class Task extends IdNameEntity {
 	private Integer importance;
 
 	@Column(name = "status")
-	private Integer status;
+	@Enumerated(EnumType.STRING)
+	private TaskStatuses status;
 
 	@Column(name = "task_type")
-	private TaskType taskType;
+	@Enumerated(EnumType.STRING)
+	private TaskTypes taskType;
 
 	public User getCreator() {
 		return creator;
@@ -95,19 +102,19 @@ public class Task extends IdNameEntity {
 		this.importance = importance;
 	}
 
-	public Integer getStatus() {
+	public TaskStatuses getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(TaskStatuses status) {
 		this.status = status;
 	}
 
-	public TaskType getTaskType() {
+	public TaskTypes getTaskType() {
 		return taskType;
 	}
 
-	public void setTaskType(TaskType taskType) {
+	public void setTaskType(TaskTypes taskType) {
 		this.taskType = taskType;
 	}
 

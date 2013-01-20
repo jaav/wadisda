@@ -4,12 +4,13 @@
 
 	<t:zone t:id="modalZone" update="show" >
 		<t:form class="form-horizontal" t:zone="^">
-			<t:errors />
+			<t:errors class="literal:alert alert-error" />
 			
 			<div class="control-group">
 				<t:datefield value="registration.epoch" class="span2" placeholder="message:date" />
-				<t:textfield value="epochTime" class="span1" placeholder="message:time" />
-				<t:textfield value="registration.duration" class="span1" placeholder="message:duration" />
+				<t:textfield t:id="time" value="epochTime" class="span1" placeholder="message:time" validate="regexp=^\d\d:\d\d$" />
+				<t:error for="time" class="literal:label label-important" />
+				<t:textfield t:id="duration" value="registration.duration" class="span1" placeholder="message:duration" />
 			</div>
 	
 			<div class="control-group">

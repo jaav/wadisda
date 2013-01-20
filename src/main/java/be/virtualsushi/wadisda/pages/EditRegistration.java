@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -12,6 +13,7 @@ import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Error;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
@@ -24,6 +26,7 @@ import be.virtualsushi.wadisda.entities.Referer;
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.Relation;
 import be.virtualsushi.wadisda.entities.SocialContext;
+import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
@@ -88,11 +91,8 @@ public class EditRegistration {
 			registration.getLocation().setName(registrationLocation);
 			registration.getLocation().setZipCode(registrationZipCode);
 		}
-		boolean isNew = registration.isNew();
+		registration.setUser((User) SecurityUtils.getSubject().getPrincipal());
 		registrationRepository.save(registration);
-		if (isNew) {
-			registration.setId(0l);
-		}
 		if (request.isXHR()) {
 			return modalZone;
 		} else {

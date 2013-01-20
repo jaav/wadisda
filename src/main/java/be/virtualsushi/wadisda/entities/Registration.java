@@ -14,8 +14,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import be.virtualsushi.wadisda.entities.enums.Genders;
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
@@ -26,9 +29,11 @@ public class Registration extends BaseEntity {
 
 	private static final long serialVersionUID = -4718943812734144874L;
 
+	@NotNull
 	@Column(name = "epoch")
 	private Date epoch;
 
+	@NotNull
 	@Column(name = "duration")
 	private Integer duration;
 
@@ -36,52 +41,65 @@ public class Registration extends BaseEntity {
 	@JoinColumn(name = "user")
 	private User user;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "conversation_type")
 	private ConversationType conversationType;
 
+	@NotBlank
 	@Column(name = "question", length = 255)
 	private String question;
 
+	@NotNull
 	@Column(name = "gender", length = 1)
 	@Enumerated(EnumType.STRING)
 	private Genders gender;
 
+	@NotNull
 	@Column(name = "age")
 	private Integer age;
 
+	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "location")
 	private Location location;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "presentation")
 	private Presentation presentation;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "attitude")
 	private Attitude attitude;
 
+	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "product_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "product", referencedColumnName = "id"))
 	private Set<Product> products;
 
+	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "product_question_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "product_question", referencedColumnName = "id"))
 	private Set<ProductQuestion> productQuestions;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "question_type")
 	private QuestionType questionType;
 
+	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "relation_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "relation", referencedColumnName = "id"))
 	private Set<Relation> relations;
 
+	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "social_context_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "social_context", referencedColumnName = "id"))
 	private Set<SocialContext> socialContexts;
 
+	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "referrer_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "referrer", referencedColumnName = "id"))
 	private Set<Referer> referers;
@@ -98,17 +116,21 @@ public class Registration extends BaseEntity {
 	@Type(type = "true_false")
 	private Boolean hasViolence;
 
+	@NotNull
 	@Column(name = "tp_gender", length = 1)
 	@Enumerated(EnumType.STRING)
 	private Genders tpGender;
 
+	@NotNull
 	@Column(name = "tp_age")
 	private Integer tpAge;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "tp_usage_type")
 	private UsageType tpUsageType;
 
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "origin")
 	private Origin origin;

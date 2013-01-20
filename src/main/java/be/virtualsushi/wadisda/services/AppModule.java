@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
+import be.virtualsushi.wadisda.services.impl.TaskEndpointFactoryImpl;
+import be.virtualsushi.wadisda.services.impl.TaskServiceImpl;
 import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
 
 /**
@@ -35,7 +37,8 @@ import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
-
+		binder.bind(TaskService.class, TaskServiceImpl.class);
+		binder.bind(TaskEndpointFactory.class, TaskEndpointFactoryImpl.class);
 	}
 
 	@FactoryDefaults
