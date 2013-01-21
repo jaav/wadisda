@@ -69,12 +69,10 @@ public class Registration extends BaseEntity {
 	@JoinColumn(name = "presentation")
 	private Presentation presentation;
 
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "attitude")
 	private Attitude attitude;
 
-	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "product_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "product", referencedColumnName = "id"))
 	private Set<Product> products;
@@ -99,7 +97,6 @@ public class Registration extends BaseEntity {
 	@JoinTable(name = "social_context_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "social_context", referencedColumnName = "id"))
 	private Set<SocialContext> socialContexts;
 
-	@NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "referrer_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "referrer", referencedColumnName = "id"))
 	private Set<Referer> referers;
@@ -130,7 +127,6 @@ public class Registration extends BaseEntity {
 	@JoinColumn(name = "tp_usage_type")
 	private UsageType tpUsageType;
 
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "origin")
 	private Origin origin;

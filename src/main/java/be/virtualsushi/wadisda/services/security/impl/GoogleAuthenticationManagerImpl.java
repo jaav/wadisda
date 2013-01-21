@@ -10,14 +10,16 @@ import org.apache.tapestry5.ioc.annotations.PostInjection;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
 
-import be.virtualsushi.wadisda.services.security.GoogleAccessToken;
-import be.virtualsushi.wadisda.services.security.GoogleAuthenticationManager;
+import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.services.security.AuthenticationManager;
+import be.virtualsushi.wadisda.services.security.GoogleAccount;
+import be.virtualsushi.wadisda.services.security.GoogleAuthenticationToken;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
 
-public class GoogleAuthenticationManagerImpl implements GoogleAuthenticationManager {
+public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 
 	@Inject
 	private AuthorizationCodeFlow authorizationCodeFlow;
@@ -52,13 +54,33 @@ public class GoogleAuthenticationManagerImpl implements GoogleAuthenticationMana
 	}
 
 	@Override
-	public void authenticate(String userId) {
+	public void authorize(String userId) {
 		try {
 			TokenResponse token = authorizationCodeFlow.newTokenRequest(userId).setRedirectUri(redirectUrl).setGrantType("authorization_code").execute();
 			Credential credential = authorizationCodeFlow.createAndStoreCredential(token, userId);
-			SecurityUtils.getSubject().login(new GoogleAccessToken(userId, credential));
+			SecurityUtils.getSubject().login(new GoogleAuthenticationToken(userId, credential));
 		} catch (IOException e) {
 			logger.error("Unable to get google API access token.", e);
 		}
+	}
+
+	@Override
+	public Credential getCurrentUserCredential() {
+		try {
+			return authorizationCodeFlow.loadCredential(((GoogleAccount) SecurityUtils.getSubject().getPrincipal()).getGoogleUserId());
+		} catch (IOException e) {
+			logger.error("Error getting access token.", e);
+			return null;
+		}
+	}
+
+	@Override
+	public User getCurrentUser() {
+		return ((GoogleAccount) SecurityUtils.getSubject().getPrincipal()).getUser();
+	}
+
+	@Override
+	public void logout() {
+		SecurityUtils.getSubject().logout();
 	}
 }

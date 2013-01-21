@@ -2,17 +2,20 @@ package be.virtualsushi.wadisda.components;
 
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.pages.Index;
+import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
 /**
  * Layout component for pages of application wadisda.
@@ -30,13 +33,22 @@ public class Layout {
 	@Inject
 	private ComponentResources resources;
 
+	@Inject
+	private AuthenticationManager authenticationManager;
+
 	@Property
 	@Inject
 	@Symbol(SymbolConstants.APPLICATION_VERSION)
 	private String appVersion;
 
+	@OnEvent(value = EventConstants.ACTION, component = "logout")
+	public Object onActionFromLogout() {
+		authenticationManager.logout();
+		return Index.class;
+	}
+
 	public User getCurrentUser() {
-		return (User) SecurityUtils.getSubject().getPrincipal();
+		return authenticationManager.getCurrentUser();
 	}
 
 	public String getMenuItemClass(String itemName) {

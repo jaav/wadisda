@@ -3,7 +3,7 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
 	<t:zone t:id="modalZone" update="show" >
-		<t:form class="form-horizontal" t:zone="^">
+		<t:form t:id="registrationForm" class="form-horizontal" t:zone="^" t:validate="registration">
 			<t:errors class="literal:alert alert-error" />
 			
 			<div class="control-group">
@@ -98,13 +98,13 @@
 				<div class="modal-body">
 					<ul class="nav nav-list">
 						<li>
-							<t:actionlink t:id="sendEmail">${message:send.email}</t:actionlink>
+							<t:actionlink t:id="sendEmail" t:zone="sendEmailZone">${message:send.email}<i t:type="zone" t:id="sendEmailZone" id="sendEmailZone" visible="false" class="icon-ok" ></i></t:actionlink>
 						</li>
 						<li>
-							<t:actionlink t:id="addAgenda">${message:add.agenda}</t:actionlink>
+							<t:actionlink t:id="addEvent" t:zone="addEventZone">${message:add.agenda}<i t:type="zone" t:id="addEventZone" id="addEventZone" visible="false" class="icon-ok" ></i></t:actionlink>
 						</li>
 						<li>
-							<t:actionlink t:id="addEvent">${message:add.event}</t:actionlink>
+							<t:actionlink t:id="addTask" t:zone="addTaskZone">${message:add.event}<i t:type="zone" t:id="addTaskZone" id="addTaskZone" visible="false" class="icon-ok" ></i></t:actionlink>
 						</li>
 					</ul>
 				</div>

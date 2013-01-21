@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.services;
+package be.virtualsushi.wadisda.services.tasks;
 
 import be.virtualsushi.wadisda.entities.enums.TaskTypes;
 

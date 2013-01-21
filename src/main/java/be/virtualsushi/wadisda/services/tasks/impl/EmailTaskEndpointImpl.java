@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.services.impl;
+package be.virtualsushi.wadisda.services.tasks.impl;
 
 import java.io.IOException;
 import java.security.Provider;
@@ -13,8 +13,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import be.virtualsushi.wadisda.entities.Task;
-import be.virtualsushi.wadisda.services.TaskEndpoint;
+import be.virtualsushi.wadisda.entities.enums.TaskStatuses;
 import be.virtualsushi.wadisda.services.gmail.OAuth2SaslClientFactory;
+import be.virtualsushi.wadisda.services.tasks.TaskEndpoint;
+
+import com.google.api.client.auth.oauth2.Credential;
 
 public class EmailTaskEndpointImpl implements TaskEndpoint {
 
@@ -32,7 +35,7 @@ public class EmailTaskEndpointImpl implements TaskEndpoint {
 	}
 
 	@Override
-	public void send(Task task, String oauthToken) throws IOException {
+	public void send(Task task, Credential credential) throws IOException {
 		Properties props = new Properties();
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.starttls.required", "true");
@@ -40,7 +43,7 @@ public class EmailTaskEndpointImpl implements TaskEndpoint {
 		props.put("mail.smtp.sasl.mechanisms", "XOAUTH2");
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.port", "587");
-		props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, oauthToken);
+		props.put(OAuth2SaslClientFactory.OAUTH_TOKEN_PROP, credential.getAccessToken());
 		Session session = Session.getInstance(props);
 		session.setDebug(true);
 
@@ -58,6 +61,7 @@ public class EmailTaskEndpointImpl implements TaskEndpoint {
 			throw new IOException(e);
 		}
 
+		task.setStatus(TaskStatuses.FINISHED);
 	}
 
 }

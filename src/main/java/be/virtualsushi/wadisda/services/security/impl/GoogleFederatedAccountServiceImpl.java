@@ -9,6 +9,7 @@ import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
 import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
+import be.virtualsushi.wadisda.services.security.GoogleAccount;
 
 import com.google.api.services.oauth2.model.Userinfo;
 
@@ -28,7 +29,7 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			user.setAvatarUrl(userInfo.getPicture());
 			userRepository.save(user);
 		}
-		return new SimpleAuthenticationInfo(user, authenticationToken.getCredentials(), realmName);
+		return new SimpleAuthenticationInfo(new GoogleAccount(user, (String) remotePrincipal), authenticationToken.getCredentials(), realmName);
 	}
 
 }

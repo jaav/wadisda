@@ -1,11 +1,12 @@
 package be.virtualsushi.wadisda.pages;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.AfterRender;
@@ -13,7 +14,6 @@ import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.corelib.components.Error;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
@@ -26,10 +26,12 @@ import be.virtualsushi.wadisda.entities.Referer;
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.Relation;
 import be.virtualsushi.wadisda.entities.SocialContext;
-import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.entities.enums.TaskTypes;
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
+import be.virtualsushi.wadisda.services.security.AuthenticationManager;
+import be.virtualsushi.wadisda.services.tasks.TaskService;
 
 public class EditRegistration {
 
@@ -45,6 +47,12 @@ public class EditRegistration {
 	@Inject
 	private Request request;
 
+	@Inject
+	private TaskService taskService;
+
+	@Inject
+	private AuthenticationManager authenticationManager;
+
 	@Property
 	private String registrationZipCode;
 
@@ -58,7 +66,7 @@ public class EditRegistration {
 	private JavaScriptSupport javaScriptSupport;
 
 	@InjectComponent
-	private Zone modalZone;
+	private Zone modalZone, sendEmailZone, addEventZone, addTaskZone;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String context) {
@@ -78,6 +86,38 @@ public class EditRegistration {
 		return registration.isNew() ? "new" : String.valueOf(registration.getId());
 	}
 
+	@OnEvent(value = EventConstants.ACTION, component = "sendEmail")
+	public Object onActionFromSendEmail() {
+		createTask(TaskTypes.SEND_EMAIL);
+		if (request.isXHR()) {
+			return sendEmailZone;
+		}
+		return null;
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addEvent")
+	public Object onActionFromAddEvent() {
+		createTask(TaskTypes.CALENDAR_EVENT);
+		if (request.isXHR()) {
+			return addEventZone;
+		}
+		return null;
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addTask")
+	public Object onActionFromAddTask() {
+		createTask(TaskTypes.TODO_TASK);
+		if (request.isXHR()) {
+			return addTaskZone;
+		}
+		return null;
+	}
+
+	private void createTask(TaskTypes type) {
+		taskService.createTask(type, registration.getUser(), registration.getUser(), registration.getQuestion(), DateUtils.addDays(new Date(), 7), registration);
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "registrationForm")
 	public Object onSuccess() {
 
 		if (registration.getLocation() == null) {
@@ -91,7 +131,7 @@ public class EditRegistration {
 			registration.getLocation().setName(registrationLocation);
 			registration.getLocation().setZipCode(registrationZipCode);
 		}
-		registration.setUser((User) SecurityUtils.getSubject().getPrincipal());
+		registration.setUser(authenticationManager.getCurrentUser());
 		registrationRepository.save(registration);
 		if (request.isXHR()) {
 			return modalZone;

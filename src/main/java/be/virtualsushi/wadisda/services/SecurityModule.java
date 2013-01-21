@@ -18,7 +18,7 @@ import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import org.tynamo.security.services.SecurityFilterChainFactory;
 import org.tynamo.security.services.impl.SecurityFilterChain;
 
-import be.virtualsushi.wadisda.services.security.GoogleAuthenticationManager;
+import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.security.impl.GoogleAuthenticationManagerImpl;
 import be.virtualsushi.wadisda.services.security.impl.GoogleFederatedAccountServiceImpl;
 import be.virtualsushi.wadisda.services.security.impl.GoogleRealm;
@@ -39,7 +39,7 @@ public class SecurityModule {
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(FederatedAccountService.class, GoogleFederatedAccountServiceImpl.class);
-		binder.bind(GoogleAuthenticationManager.class, GoogleAuthenticationManagerImpl.class);
+		binder.bind(AuthenticationManager.class, GoogleAuthenticationManagerImpl.class);
 		binder.bind(AuthenticatingRealm.class, GoogleRealm.class).withId("GoogleRealm");
 	}
 

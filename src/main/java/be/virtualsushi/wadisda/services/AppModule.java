@@ -24,8 +24,10 @@ import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
-import be.virtualsushi.wadisda.services.impl.TaskEndpointFactoryImpl;
-import be.virtualsushi.wadisda.services.impl.TaskServiceImpl;
+import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
+import be.virtualsushi.wadisda.services.tasks.TaskService;
+import be.virtualsushi.wadisda.services.tasks.impl.TaskEndpointFactoryImpl;
+import be.virtualsushi.wadisda.services.tasks.impl.TaskServiceImpl;
 import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
 
 /**

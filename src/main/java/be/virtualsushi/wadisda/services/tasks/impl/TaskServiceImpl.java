@@ -1,19 +1,20 @@
-package be.virtualsushi.wadisda.services.impl;
+package be.virtualsushi.wadisda.services.tasks.impl;
 
-import java.io.IOException;
 import java.util.Date;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.Task;
 import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.entities.enums.TaskStatuses;
 import be.virtualsushi.wadisda.entities.enums.TaskTypes;
-import be.virtualsushi.wadisda.services.TaskEndpointFactory;
-import be.virtualsushi.wadisda.services.TaskService;
 import be.virtualsushi.wadisda.services.repository.TaskRepository;
+import be.virtualsushi.wadisda.services.security.AuthenticationManager;
+import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
+import be.virtualsushi.wadisda.services.tasks.TaskService;
 
 public class TaskServiceImpl implements TaskService {
 
@@ -23,6 +24,9 @@ public class TaskServiceImpl implements TaskService {
 	@Inject
 	private TaskEndpointFactory taskEndpointFactory;
 
+	@Inject
+	private AuthenticationManager authenticationManager;
+
 	private final Logger logger;
 
 	public TaskServiceImpl(Logger logger) {
@@ -30,7 +34,7 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public void createTask(TaskTypes type, User creator, User asignee, String name, Date dueDate) {
+	public void createTask(TaskTypes type, User creator, User asignee, String name, Date dueDate, Registration registration) {
 		Task task = new Task();
 		task.setTaskType(type);
 		task.setCreator(creator);
@@ -38,21 +42,14 @@ public class TaskServiceImpl implements TaskService {
 		task.setName(name);
 		task.setDueDate(dueDate);
 		task.setCreationDate(new Date());
-		switch (type) {
-		case CALENDAR_EVENT:
-		case TODO_TASK:
+		task.setRegistration(registration);
+		try {
+			taskEndpointFactory.getEndpoint(type).send(task, authenticationManager.getCurrentUserCredential());
+		} catch (Exception e) {
+			logger.error("Error sending task #" + task.getId(), e);
 			task.setStatus(TaskStatuses.CREATED);
-			break;
-		case SEND_EMAIL:
-			task.setStatus(TaskStatuses.FINISHED);
-			break;
 		}
 		taskRepository.save(task);
-		try {
-			taskEndpointFactory.getEndpoint(type).send(task, "");
-		} catch (IOException e) {
-			logger.error("Error sending task #" + task.getId(), e);
-		}
 	}
 
 }

@@ -65,7 +65,7 @@
 							<h5>${currentUser.name}</h5>
 							<div class="btn-toolbar">
 								<a class="btn btn-info" href="#">${message:account}</a>
-								<a class="btn btn-info" href="#">${message:logout}</a>
+								<t:actionlink t:id="logout" class="btn btn-info" >${message:logout}</t:actionlink>
 							</div>
 						</div>
 					</div>

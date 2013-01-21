@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import be.virtualsushi.wadisda.entities.enums.TaskStatuses;
@@ -17,13 +19,16 @@ public class Task extends IdNameEntity {
 
 	private static final long serialVersionUID = -8132594827462746290L;
 
-	@Column(name = "creator")
+	@ManyToOne
+	@JoinColumn(name = "creator")
 	private User creator;
 
-	@Column(name = "previous_assignee")
+	@ManyToOne
+	@JoinColumn(name = "previous_assignee")
 	private User previousAssignee;
 
-	@Column(name = "assignee")
+	@ManyToOne
+	@JoinColumn(name = "assignee")
 	private User assignee;
 
 	@Column(name = "description")
@@ -39,12 +44,16 @@ public class Task extends IdNameEntity {
 	private Integer importance;
 
 	@Column(name = "status")
-	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.ORDINAL)
 	private TaskStatuses status;
 
 	@Column(name = "task_type")
-	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.ORDINAL)
 	private TaskTypes taskType;
+
+	@ManyToOne
+	@JoinColumn(name = "registration")
+	private Registration registration;
 
 	public User getCreator() {
 		return creator;
@@ -116,6 +125,14 @@ public class Task extends IdNameEntity {
 
 	public void setTaskType(TaskTypes taskType) {
 		this.taskType = taskType;
+	}
+
+	public Registration getRegistration() {
+		return registration;
+	}
+
+	public void setRegistration(Registration registration) {
+		this.registration = registration;
 	}
 
 }
