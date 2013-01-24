@@ -30,7 +30,7 @@ public abstract class AbstractJpaRepositoryImpl<T extends BaseEntity> extends Li
 
 	@Override
 	public void delete(T entity) {
-		getEntityManager().detach(entity);
+		getEntityManager().remove(entity);
 	}
 
 	@Override

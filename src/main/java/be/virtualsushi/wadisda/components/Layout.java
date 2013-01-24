@@ -20,8 +20,8 @@ import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 /**
  * Layout component for pages of application wadisda.
  */
-@Import(stylesheet = { "classpath:/META-INF/resources/webjars/bootstrap/2.2.2/css/bootstrap.css", "classpath:/META-INF/resources/webjars/bootstrap/2.2.2/css/bootstrap-responsive.css" },
-		library = { "classpath:/META-INF/resources/webjars/bootstrap/2.2.2/js/bootstrap.js" })
+@Import(stylesheet = { "classpath:/META-INF/resources/webjars/bootstrap/2.2.2/css/bootstrap.css", "classpath:/META-INF/resources/webjars/bootstrap/2.2.2/css/bootstrap-responsive.css", "context:/layout/layout.css" },
+		library = { "classpath:/META-INF/resources/webjars/bootstrap/2.2.2/js/bootstrap.js", "custombubble-validation.js" })
 public class Layout {
 	/**
 	 * The page title, for the <title> element and the <h1>element.

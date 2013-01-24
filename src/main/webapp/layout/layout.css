@@ -1,0 +1,36 @@
+input[class*="span"],
+select[class*="span"],
+textarea[class*="span"],
+.uneditable-input[class*="span"],
+.row-fluid input[class*="span"],
+.row-fluid select[class*="span"],
+.row-fluid textarea[class*="span"],
+.row-fluid .uneditable-input[class*="span"] {
+	margin-left: 2.5641%;
+}
+
+.empty {
+	color: #999999;
+}
+
+.not-empty {
+	color: #333333;
+}
+
+.bs-docs-example {
+	background-color: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	border-radius: 4px 4px 4px 4px;
+	margin: 15px 0;
+	padding: 10px;
+}
+
+.t-error {
+	border-color: #B94A48 !important;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset !important;
+	color: #B94A48 !important;
+}
+
+.form-horizontal .control-group {
+    margin-bottom: 30px;
+}

@@ -2,8 +2,13 @@ package be.virtualsushi.wadisda.services;
 
 import java.io.IOException;
 
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.Translator;
+import org.apache.tapestry5.ValidationDecorator;
+import org.apache.tapestry5.beanvalidator.ClientConstraintDescriptor;
+import org.apache.tapestry5.beanvalidator.ClientConstraintDescriptorSource;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -15,15 +20,20 @@ import org.apache.tapestry5.ioc.services.FactoryDefaults;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.ioc.services.SymbolSource;
 import org.apache.tapestry5.services.ClasspathAssetAliasManager;
+import org.apache.tapestry5.services.Environment;
+import org.apache.tapestry5.services.MarkupRenderer;
+import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.TranslatorSource;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
+import be.virtualsushi.wadisda.services.impl.CustomValidationDecorator;
 import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
 import be.virtualsushi.wadisda.services.tasks.TaskService;
 import be.virtualsushi.wadisda.services.tasks.impl.TaskEndpointFactoryImpl;
@@ -146,6 +156,29 @@ public class AppModule {
 	@Contribute(TranslatorSource.class)
 	public static void contributeTranslatorSource(MappedConfiguration<Class<?>, Translator<?>> configuration) {
 		configuration.add(TimeValue.class, new TimeValueTranslator());
+	}
+
+	@Contribute(MarkupRenderer.class)
+	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration, final Environment environment) {
+
+		MarkupRendererFilter customValidationDecorator = new MarkupRendererFilter() {
+			public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer) {
+				ValidationDecorator decorator = new CustomValidationDecorator(environment, writer);
+
+				environment.push(ValidationDecorator.class, decorator);
+
+				renderer.renderMarkup(writer);
+
+				environment.pop(ValidationDecorator.class);
+			}
+		};
+		configuration.override("ValidationDecorator", customValidationDecorator);
+	}
+
+	@Contribute(ClientConstraintDescriptorSource.class)
+	public static void provideClientConstraintDescriptors(Configuration<ClientConstraintDescriptor> configuration) {
+
+		configuration.add(new ClientConstraintDescriptor(NotEmpty.class, "notnull"));
 	}
 
 }

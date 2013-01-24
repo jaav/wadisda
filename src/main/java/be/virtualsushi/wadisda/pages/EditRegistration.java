@@ -29,6 +29,7 @@ import be.virtualsushi.wadisda.entities.SocialContext;
 import be.virtualsushi.wadisda.entities.enums.TaskTypes;
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
+import be.virtualsushi.wadisda.services.repository.ProductRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.tasks.TaskService;
@@ -45,6 +46,9 @@ public class EditRegistration {
 	private RegistrationRepository registrationRepository;
 
 	@Inject
+	private ProductRepository productRepository;
+
+	@Inject
 	private Request request;
 
 	@Inject
@@ -52,6 +56,9 @@ public class EditRegistration {
 
 	@Inject
 	private AuthenticationManager authenticationManager;
+
+	@Environmental
+	private JavaScriptSupport javaScriptSupport;
 
 	@Property
 	private String registrationZipCode;
@@ -62,14 +69,15 @@ public class EditRegistration {
 	@Property
 	private Registration registration;
 
-	@Environmental
-	private JavaScriptSupport javaScriptSupport;
+	@Property
+	private Product product;
 
 	@InjectComponent
-	private Zone modalZone, sendEmailZone, addEventZone, addTaskZone;
+	private Zone modalZone, sendEmailZone, addEventZone, addTaskZone, productZone;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String context) {
+		product = new Product();
 		try {
 			registration = registrationRepository.findOne(Long.parseLong(context));
 		} catch (Exception e) {
@@ -136,13 +144,25 @@ public class EditRegistration {
 		if (request.isXHR()) {
 			return modalZone;
 		} else {
-			return OverviewRegistrations.class;
+			return null;
+		}
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "productForm")
+	public Object onSuccessFromProductForm() {
+		productRepository.save(product);
+		if (request.isXHR()) {
+			return productZone;
+		} else {
+			return null;
 		}
 	}
 
 	@AfterRender
 	public void afterRender() {
 		javaScriptSupport.addScript("$('#%s').bind(Tapestry.ZONE_UPDATED_EVENT, function(){$('#dialog').modal();});", modalZone.getClientId());
+		javaScriptSupport.addScript("$('#addProduct').bind('click', function(){$('#productDialog').modal();});");
+		javaScriptSupport.addScript("$('#productFormCancel').bind('click', function(){$('#productDialog').modal('hide');});");
 	}
 
 	public TimeValue getEpochTime() {

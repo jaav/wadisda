@@ -1,61 +1,58 @@
 <!DOCTYPE html>
-<html t:type="layout" title="${message:title}"
+<t:layout title="${message:title}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-        <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
-        
-    <script>
-    	
-    	
     
-    </script>
+    <div class="row-fluid">
+    
+    	<div class="well span6">
+    		<div class="row-fluid" >
+				<h4 class="span6">${message:my.agenda}</h4>
+	   			<t:pagelink page="index" class="btn pull-right">${message:show.all}</t:pagelink>
+   			</div>
+    		
+    		<t:progressivedisplay t:id="calendarsList" t:update="show" t:initial="block:loadingBlock">
+    			<table class="table table-hover">
+    				<tbody>
+			    		<t:loop source="events" value="event">
+			    			<tr>
+			    				<td>${eventTimeRange}</td>
+			    				<td>${event.summary}</td>
+			    			</tr>
+			    		</t:loop>
+	    			</tbody>
+	    		</table>
+    		</t:progressivedisplay>
+    		
+    	</div>
+    	
+    	<div class="well span6">
+    		<div class="row-fluid" >
+				<h4 class="span6">${message:my.todo.list}</h4>
+	   			<t:pagelink page="index" class="btn pull-right">${message:show.all}</t:pagelink>
+   			</div>
+   			
+   			<t:progressivedisplay t:id="tasksList" t:update="show" t:initial="block:loadingBlock">
+    			<table class="table table-hover">
+    				<tbody>
+			    		<t:loop source="tasks" value="task">
+			    			<tr>
+			    				<td>${task.title}</td>
+			    				<td></td>
+			    			</tr>
+			    		</t:loop>
+	    			</tbody>
+	    		</table>
+    		</t:progressivedisplay>
+    		
+    	</div>
+        
+    </div>   
+    
+    <t:block t:id="loadingBlock">
+    	<div style="text-align:center;">
+    		<img src="${asset:huge_loading.gif}" />
+    	</div>
+    </t:block> 
 
-    <p>${message:greeting}</p>
-
-    <p>The current time is: <strong>${currentTime}</strong></p>
-
-    <!-- A Zone is a component that can be updated in place, triggered by other components. -->
-    <t:zone t:id="zone" id="zone" >
-        <p>
-            You have clicked the link <strong>${clickCount}</strong> times.
-            
-            <t:loop source="relations" value="relation">
-            	<p>${relation.name}</p>
-            </t:loop>
-        </p>
-
-        <p>
-            [
-            <t:actionlink t:id="increment">increment</t:actionlink>
-            ]
-            &nbsp;
-            [
-            <t:actionlink t:id="incrementAjax" zone="^">increment (via Ajax)</t:actionlink>
-            ]
-        </p>
-
-
-		<div id="dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
-				<div class="modal-header">
-					<h3 id="dialogLabel">${message:registration.saved}</h3>
-				</div>
-				<div class="modal-body">
-					<ul>
-						<li>
-							<t:actionlink t:id="sendEmail">${message:send.email}</t:actionlink>
-						</li>
-						<li>
-							<t:actionlink t:id="addAgenda">${message:add.agenda}</t:actionlink>
-						</li>
-						<li>
-							<t:actionlink t:id="addEvent">${message:add.event}</t:actionlink>
-						</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<t:pagelink class="btn btn-primary" page="overviewRegistrations" >${message:finish}</t:pagelink>			
-				</div>
-			</div>
-    </t:zone>
-
-</html>
+</t:layout>

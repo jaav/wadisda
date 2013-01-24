@@ -21,11 +21,15 @@ import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
+import be.virtualsushi.wadisda.services.repository.ProductRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
+import be.virtualsushi.wadisda.services.repository.SimpleJpaRepository;
 import be.virtualsushi.wadisda.services.repository.TaskRepository;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
+import be.virtualsushi.wadisda.services.repository.impl.ProductRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.RegistrationRepositoryImpl;
+import be.virtualsushi.wadisda.services.repository.impl.SimpleJpaRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.TaskRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.UserRepositoryImpl;
 
@@ -38,6 +42,8 @@ public class PersistenceModule {
 		binder.bind(UserRepository.class, UserRepositoryImpl.class);
 		binder.bind(RegistrationRepository.class, RegistrationRepositoryImpl.class);
 		binder.bind(TaskRepository.class, TaskRepositoryImpl.class);
+		binder.bind(ProductRepository.class, ProductRepositoryImpl.class);
+		binder.bind(SimpleJpaRepository.class, SimpleJpaRepositoryImpl.class);
 	}
 
 	@EagerLoad
