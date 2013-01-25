@@ -8,8 +8,8 @@
 				<t:errors class="literal:alert alert-error" />
 				
 				<div class="control-group">
-					<t:datefield t:id="date" value="registration.epoch" class="span2" placeholder="message:date" />
-					<t:textfield t:id="time" value="epochTime" class="span1" placeholder="message:time" validate="regexp=^\d\d:\d\d$" />
+					<t:datefield t:id="date" value="date" class="span2" placeholder="message:date" validate="required" />
+					<t:textfield t:id="time" value="time" class="span1" placeholder="message:time" validate="regexp=^\d\d:\d\d$" />
 					<t:textfield t:id="duration" value="registration.duration" class="span1 offset1" placeholder="message:duration" />
 				</div>
 		

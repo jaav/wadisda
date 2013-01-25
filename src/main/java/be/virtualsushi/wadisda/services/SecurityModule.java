@@ -67,12 +67,4 @@ public class SecurityModule {
 				.setCredentialStore(new MemoryCredentialStore()).build();
 	}
 
-	public HttpTransport buildHttpTRansport() {
-		return new ApacheHttpTransport();
-	}
-
-	public JsonFactory buildJsonFactory() {
-		return new JacksonFactory();
-	}
-
 }

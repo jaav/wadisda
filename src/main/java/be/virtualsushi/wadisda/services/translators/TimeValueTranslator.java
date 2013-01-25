@@ -19,7 +19,7 @@ public class TimeValueTranslator extends AbstractTranslator<TimeValue> {
 	@Override
 	public String toClient(TimeValue value) {
 		if (value != null) {
-			return value.getHours() + ":" + value.getMinutes();
+			return (value.getHours() < 10 ? "0" + value.getHours() : value.getHours()) + ":" + (value.getMinutes() < 10 ? "0" + value.getMinutes() : value.getMinutes());
 		}
 		return null;
 	}

@@ -41,6 +41,11 @@ import be.virtualsushi.wadisda.services.tasks.impl.TaskEndpointFactoryImpl;
 import be.virtualsushi.wadisda.services.tasks.impl.TaskServiceImpl;
 import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
 
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.apache.ApacheHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson.JacksonFactory;
+
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
  * it's a good place to configure and extend Tapestry, or to place your own
@@ -178,9 +183,16 @@ public class AppModule {
 
 	@Contribute(ClientConstraintDescriptorSource.class)
 	public static void provideClientConstraintDescriptors(Configuration<ClientConstraintDescriptor> configuration) {
-
 		configuration.add(new ClientConstraintDescriptor(NotEmpty.class, "notnull"));
 		configuration.add(new ClientConstraintDescriptor(NotBlank.class, "notnull"));
+	}
+
+	public HttpTransport buildHttpTRansport() {
+		return new ApacheHttpTransport();
+	}
+
+	public JsonFactory buildJsonFactory() {
+		return new JacksonFactory();
 	}
 
 }

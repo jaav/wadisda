@@ -1,5 +1,6 @@
 package be.virtualsushi.wadisda.pages;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.beanvalidator.BeanValidatorSource;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
@@ -62,6 +64,9 @@ public class EditRegistration {
 
 	@Inject
 	private AuthenticationManager authenticationManager;
+
+	@Inject
+	private BeanValidatorSource beanValidatorSource;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
@@ -229,7 +234,22 @@ public class EditRegistration {
 		return null;
 	}
 
-	public TimeValue getEpochTime() {
+	public Date getDate() {
+		return registration.getEpoch();
+	}
+
+	public void setDate(Date date) {
+		if (registration.getEpoch() != null && date != null) {
+			Calendar calendar = DateUtils.toCalendar(date);
+			Date newDate = DateUtils.setYears(registration.getEpoch(), calendar.get(Calendar.YEAR));
+			newDate = DateUtils.setMonths(newDate, calendar.get(Calendar.MONTH));
+			registration.setEpoch(DateUtils.setDays(newDate, calendar.get(Calendar.DAY_OF_MONTH)));
+		} else {
+			registration.setEpoch(date);
+		}
+	}
+
+	public TimeValue getTime() {
 		if (registration.getEpoch() != null) {
 			return TimeValue.of(registration.getEpoch());
 		} else {
@@ -237,11 +257,17 @@ public class EditRegistration {
 		}
 	}
 
-	public void setEpochTime(TimeValue value) {
-		if (registration.getEpoch() != null && value != null) {
-			DateUtils.setHours(registration.getEpoch(), value.getHours());
-			DateUtils.setMinutes(registration.getEpoch(), value.getMinutes());
+	public void setTime(TimeValue time) {
+		if (time == null) {
+			return;
 		}
+		Date newEpoch = null;
+		if (registration.getEpoch() != null) {
+			newEpoch = DateUtils.setHours(registration.getEpoch(), time.getHours());
+		} else {
+			newEpoch = DateUtils.setHours(new Date(), time.getHours());
+		}
+		registration.setEpoch(DateUtils.setMinutes(newEpoch, time.getMinutes()));
 	}
 
 	public SelectModel getSelectModel(String className) throws ClassNotFoundException {
