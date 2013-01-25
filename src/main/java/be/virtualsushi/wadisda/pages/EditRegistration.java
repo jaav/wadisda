@@ -11,6 +11,7 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
@@ -31,9 +32,11 @@ import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
 import be.virtualsushi.wadisda.services.repository.ProductRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
+import be.virtualsushi.wadisda.services.repository.SimpleJpaRepository;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.tasks.TaskService;
 
+@Import(library = { "edit-registration.js" })
 public class EditRegistration {
 
 	@Inject
@@ -47,6 +50,9 @@ public class EditRegistration {
 
 	@Inject
 	private ProductRepository productRepository;
+
+	@Inject
+	private SimpleJpaRepository simpleJpaRepository;
 
 	@Inject
 	private Request request;
@@ -72,12 +78,28 @@ public class EditRegistration {
 	@Property
 	private Product product;
 
+	@Property
+	private ProductQuestion productQuestion;
+
+	@Property
+	private Relation relation;
+
+	@Property
+	private Referer referer;
+
+	@Property
+	private SocialContext socialContext;
+
 	@InjectComponent
-	private Zone modalZone, sendEmailZone, addEventZone, addTaskZone, productZone;
+	private Zone modalZone, sendEmailZone, addEventZone, addTaskZone, topZone, productZone, productQuestionZone, relationZone, refererZone, socialContextZone;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String context) {
 		product = new Product();
+		productQuestion = new ProductQuestion();
+		relation = new Relation();
+		referer = new Referer();
+		socialContext = new SocialContext();
 		try {
 			registration = registrationRepository.findOne(Long.parseLong(context));
 		} catch (Exception e) {
@@ -97,28 +119,19 @@ public class EditRegistration {
 	@OnEvent(value = EventConstants.ACTION, component = "sendEmail")
 	public Object onActionFromSendEmail() {
 		createTask(TaskTypes.SEND_EMAIL);
-		if (request.isXHR()) {
-			return sendEmailZone;
-		}
-		return null;
+		return ajaxReturnWithGracefullFallback(sendEmailZone);
 	}
 
 	@OnEvent(value = EventConstants.ACTION, component = "addEvent")
 	public Object onActionFromAddEvent() {
 		createTask(TaskTypes.CALENDAR_EVENT);
-		if (request.isXHR()) {
-			return addEventZone;
-		}
-		return null;
+		return ajaxReturnWithGracefullFallback(addEventZone);
 	}
 
 	@OnEvent(value = EventConstants.ACTION, component = "addTask")
 	public Object onActionFromAddTask() {
 		createTask(TaskTypes.TODO_TASK);
-		if (request.isXHR()) {
-			return addTaskZone;
-		}
-		return null;
+		return ajaxReturnWithGracefullFallback(addTaskZone);
 	}
 
 	private void createTask(TaskTypes type) {
@@ -141,28 +154,79 @@ public class EditRegistration {
 		}
 		registration.setUser(authenticationManager.getCurrentUser());
 		registrationRepository.save(registration);
-		if (request.isXHR()) {
-			return modalZone;
-		} else {
-			return null;
-		}
+		return ajaxReturnWithGracefullFallback(modalZone);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "productForm")
 	public Object onSuccessFromProductForm() {
 		productRepository.save(product);
-		if (request.isXHR()) {
-			return productZone;
-		} else {
-			return null;
-		}
+		return ajaxReturnWithGracefullFallback(topZone);
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "productQuestionForm")
+	public Object onSuccessFromProductQuestionForm() {
+		simpleJpaRepository.save(productQuestion);
+		return ajaxReturnWithGracefullFallback(topZone);
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "relationForm")
+	public Object onSuccessFromRelationForm() {
+		simpleJpaRepository.save(relation);
+		return ajaxReturnWithGracefullFallback(topZone);
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "refererForm")
+	public Object onSuccessFromRefererForm() {
+		simpleJpaRepository.save(referer);
+		return ajaxReturnWithGracefullFallback(topZone);
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "socialContextForm")
+	public Object onSuccessFromSocialContextForm() {
+		simpleJpaRepository.save(socialContext);
+		return ajaxReturnWithGracefullFallback(topZone);
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addProduct")
+	public Object onActionFromAddProduct() {
+		product = new Product();
+		return ajaxReturnWithGracefullFallback(productZone);
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addProductQuestion")
+	public Object onActionFromAddProductQuestion() {
+		productQuestion = new ProductQuestion();
+		return ajaxReturnWithGracefullFallback(productQuestionZone);
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addRelation")
+	public Object onActionFromAddRelation() {
+		relation = new Relation();
+		return ajaxReturnWithGracefullFallback(relationZone);
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addReferer")
+	public Object onActionFromAddReferer() {
+		referer = new Referer();
+		return ajaxReturnWithGracefullFallback(refererZone);
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "addSocialContext")
+	public Object onActionFromAddSocialContext() {
+		socialContext = new SocialContext();
+		return ajaxReturnWithGracefullFallback(socialContextZone);
 	}
 
 	@AfterRender
-	public void afterRender() {
-		javaScriptSupport.addScript("$('#%s').bind(Tapestry.ZONE_UPDATED_EVENT, function(){$('#dialog').modal();});", modalZone.getClientId());
-		javaScriptSupport.addScript("$('#addProduct').bind('click', function(){$('#productDialog').modal();});");
-		javaScriptSupport.addScript("$('#productFormCancel').bind('click', function(){$('#productDialog').modal('hide');});");
+	public void onAfterRender() {
+		javaScriptSupport.addInitializerCall("initPage", "");
+	}
+
+	private Object ajaxReturnWithGracefullFallback(Object ajaxObject) {
+		if (request.isXHR()) {
+			return ajaxObject;
+		}
+		return null;
 	}
 
 	public TimeValue getEpochTime() {

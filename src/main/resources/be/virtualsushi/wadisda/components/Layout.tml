@@ -4,18 +4,6 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title>${message:app.title}: ${title}</title>
-		<script>
-			$(window).load(function() {
-				function colorizeSelect(){
-	    			if($(this).val() == "") $(this).addClass("empty");
-	    			else $(this).removeClass("empty")
-				}
-				
-				$("select option").addClass("not-empty");
-	
-				$("select").on('change keyup', colorizeSelect).change();
-    		});
-		</script>
 	</head>
 	<body style="padding: 25px;">
 		<t:wadisdaheader t:containerClass="container-fluid" />

@@ -14,17 +14,27 @@
 
 		var id = field.attr('id') + "\\:errorpopup";
 
-		if ($("#" + id).size() == 0) // if the errorpopup isn't on the
+		if ($("#" + id).size() == 0) {
+			// if the errorpopup isn't on the
 			// page yet, we create it
-			
-		var fieldPosition = $(field).offset();
 
-		field
-				.after("<div id='"
-						+ field.attr('id')
-						+ ":errorpopup' class='label label-important' style='position:absolute !important;left:"
-						+ fieldPosition.left + "px;" + "top:"
-						+ (fieldPosition.top + $(field).height() + 11) + "px;'/>");
+			var fieldPosition = $(field).offset();
+
+			var bubblePosition = "absolute";
+			if ($(form).parent().attr('class').indexOf('modal') == 0) {
+				bubblePosition = "fixed";
+			}
+
+			field
+					.after("<div id='"
+							+ field.attr('id')
+							+ ":errorpopup' class='label label-important' style='position:"
+							+ bubblePosition + " !important;left:"
+							+ fieldPosition.left + "px;" + "top:"
+							+ (fieldPosition.top + $(field).height() + 11)
+							+ "px;'/>");
+		}
+		
 		Tapestry.ErrorPopup.show($("#" + id), "<span>" + message + "</span>");
 
 	};

@@ -28,6 +28,7 @@ import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.TranslatorSource;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 
@@ -179,6 +180,7 @@ public class AppModule {
 	public static void provideClientConstraintDescriptors(Configuration<ClientConstraintDescriptor> configuration) {
 
 		configuration.add(new ClientConstraintDescriptor(NotEmpty.class, "notnull"));
+		configuration.add(new ClientConstraintDescriptor(NotBlank.class, "notnull"));
 	}
 
 }

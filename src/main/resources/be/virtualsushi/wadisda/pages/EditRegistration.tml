@@ -2,141 +2,233 @@
 <t:layout title="${message:new.registration}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-	<t:zone t:id="modalZone" update="show" >
-		<t:form t:id="registrationForm" class="form-horizontal" t:zone="^" t:validate="registration">
-			<t:errors class="literal:alert alert-error" />
-			
-			<div class="control-group">
-				<t:datefield t:id="date" value="registration.epoch" class="span2" placeholder="message:date" />
-				<t:textfield t:id="time" value="epochTime" class="span1" placeholder="message:time" validate="regexp=^\d\d:\d\d$" />
-				<t:textfield t:id="duration" value="registration.duration" class="span1 offset1" placeholder="message:duration" />
-			</div>
-	
-			<div class="control-group">
-				<t:select t:id="conversationType" value="registration.conversationType" model="getSelectModel('ConversationType')" blankLabel="message:conversationType-label" class="span3" />
-			</div>
-	
-			<div class="control-group">
-				<t:textarea t:id="question" value="registration.question" class="span9" placeholder="message:question" />
-			</div>
-	
-			<div class="control-group">
-				<div class="span4">
-					<t:select t:id="gender" value="registration.gender" class="span6" blankLabel="message:gender" />
-					<t:textfield t:id="age" value="registration.age" placeholder="message:age" class="span3" />
+	<t:zone t:id="topZone" update="show">
+		<t:zone t:id="modalZone" id="modalZone" update="show" >
+			<t:form t:id="registrationForm" class="form-horizontal" t:zone="^" t:validate="registration">
+				<t:errors class="literal:alert alert-error" />
+				
+				<div class="control-group">
+					<t:datefield t:id="date" value="registration.epoch" class="span2" placeholder="message:date" />
+					<t:textfield t:id="time" value="epochTime" class="span1" placeholder="message:time" validate="regexp=^\d\d:\d\d$" />
+					<t:textfield t:id="duration" value="registration.duration" class="span1 offset1" placeholder="message:duration" />
 				</div>
-				<label class="checkbox inline offset1">
-					<t:checkbox value="registration.hasViolence" />
-					${message:hasViolence}
-				</label>
-			</div>
-	
-			<div class="control-group">
-				<div class="span4">
-					<t:textfield t:id="zipCode" value="registrationZipCode" class="span3" placeholder="message:zipCode" />
-					<t:textfield t:id="location" value="registrationLocation" class="span9" placeholder="message:location" />
+		
+				<div class="control-group">
+					<t:select t:id="conversationType" value="registration.conversationType" model="getSelectModel('ConversationType')" blankLabel="message:conversationType-label" class="span3" />
 				</div>
-			</div>
-	
-			<div class="control-group">
-				<div class="span4">
-					<t:select t:id="presentation" value="registration.presentation" model="getSelectModel('Presentation')" blankLabel="message:presentation" class="span6" />
+		
+				<div class="control-group">
+					<t:textarea t:id="question" value="registration.question" class="span9" placeholder="message:question" />
 				</div>
-				<t:select t:id="relation" value="registrationRelation" model="getSelectModel('Relation')" blankLabel="message:relation" class="offset1" />
-				<t:actionlink style="margin-left:1%;">${message:add.relation}</t:actionlink>
-			</div>
-	
-			<div class="control-group">
-				<div t:type="zone" t:id="productZone" class="span4">
-					<t:select t:id="product" value="registrationProduct" model="getSelectModel('Product')" blankLabel="message:product" class="span6" />
-					<a id="addProduct" style="margin-left:3%;margin-right:0.99%;" href="#">${message:add.product}</a>
+		
+				<div class="control-group">
+					<div class="span4">
+						<t:select t:id="gender" value="registration.gender" class="span6" blankLabel="message:gender" />
+						<t:textfield t:id="age" value="registration.age" placeholder="message:age" class="span3" />
+					</div>
+					<label class="checkbox inline offset1">
+						<t:checkbox value="registration.hasViolence" />
+						${message:hasViolence}
+					</label>
 				</div>
-				<t:select t:id="referer" value="registrationReferer" model="getSelectModel('Referer')" blankLabel="message:referer" class="offset1" />
-				<t:actionlink style="margin-left:1%;">${message:add.referer}</t:actionlink>
-			</div>
-	
-			<div class="control-group">
-				<div class="span4">
-					<t:select t:id="productQuestion" value="registrationProductQuestion" model="getSelectModel('ProductQuestion','question')" blankLabel="message:productQuestion"	class="span6" />
-					<t:actionlink style="margin-left:3%;margin-right:0.99%;">${message:add.product.question}</t:actionlink>
-				</div>
-				<t:select t:is="socialContext" value="registrationSocialContext" model="getSelectModel('SocialContext')"	blankLabel="message:socialContext" class="offset1" />
-				<t:actionlink style="margin-left:1%;">${message:add.social.context}</t:actionlink>
-			</div>
-	
-			<div class="control-group">
-				<div class="span4">
-					<t:select t:id="questionType" value="registration.questionType" model="getSelectModel('QuestionType')" blankLabel="message:questionType-label" class="span12" />
-				</div>
-				<t:select t:id="origin" value="registration.origin" model="getSelectModel('Origin')" blankLabel="message:origin" class="offset1" />
-			</div>
-			
-			<div class="control-group">
-				<div class="bs-docs-example span9" >
-					<h6>${message:third.party.person.title}</h6>
-					<hr />
-					<div class="control-group">
-						<t:select t:id="tpGender" value="registration.tpGender" blankLabel="message:gender" />
-						<t:textfield t:id="tpAge" value="registration.tpAge" placeholder="message:age" class="span1" />
-						<t:select t:id="tpUsageType" value="registration.tpUsageType" model="getSelectModel('UsageType')" blankLabel="message:usageType" class="span4" />
+		
+				<div class="control-group">
+					<div class="span4">
+						<t:textfield t:id="zipCode" value="registrationZipCode" class="span3" placeholder="message:zipCode" />
+						<t:textfield t:id="location" value="registrationLocation" class="span9" placeholder="message:location" />
 					</div>
 				</div>
-			</div>
-	
-			<div class="form-actions span9 controls-row" style="margin-left:0;">
-				<div class="btn-toolbar" style="float:right;">
-					<t:pagelink page="overviewregistrations" class="btn" >${message:cancel}</t:pagelink>
-					<button type="submit" class="btn btn-primary">${message:save}</button>
-				</div>
-			</div>
-	
-		</t:form>
-	</t:zone>
-	
-	<div id="dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true">
-		<div class="modal-header">
-			<h3 id="dialogLabel">${message:registration.saved}</h3>
-		</div>
-		<div class="modal-body">
-			<ul class="nav nav-list">
-				<li>
-					<t:actionlink t:id="sendEmail" t:zone="sendEmailZone">${message:send.email}<i t:type="zone" t:id="sendEmailZone" id="sendEmailZone" visible="false" class="icon-ok" ></i></t:actionlink>
-				</li>
-				<li>
-					<t:actionlink t:id="addEvent" t:zone="addEventZone">${message:add.agenda}<i t:type="zone" t:id="addEventZone" id="addEventZone" visible="false" class="icon-ok" ></i></t:actionlink>
-				</li>
-				<li>
-					<t:actionlink t:id="addTask" t:zone="addTaskZone">${message:add.event}<i t:type="zone" t:id="addTaskZone" id="addTaskZone" visible="false" class="icon-ok" ></i></t:actionlink>
-				</li>
-			</ul>
-		</div>
-		<div class="modal-footer">
-			<t:pagelink class="btn btn-primary" page="overviewRegistrations" >${message:finish}</t:pagelink>			
-		</div>
-	</div>
-	
-	<div id="productDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="productDialogLabel" aria-hidden="true">
-		<div class="modal-header">
-			<h3 id="productDialogLabel">${message:registration.saved}</h3>
-		</div>
-		<div class="modal-body">
-			<t:form t:id="productForm" class="form-horizontal" t:zone="productZone" t:validate="product">
+		
 				<div class="control-group">
-					<label t:type="label" class="control-label" for="productName" />
-					<t:textfield t:id="productName" value="product.name" class="span4"/>
+					<div class="span4">
+						<t:select t:id="presentation" value="registration.presentation" model="getSelectModel('Presentation')" blankLabel="message:presentation" class="span6" />
+					</div>
+					<t:select t:id="relation" value="registrationRelation" model="getSelectModel('Relation')" blankLabel="message:relation" class="offset1" />
+					<t:actionlink t:id="addRelation" t:zone="relationZone" id="addRelation" class="btn btn-link">${message:add.relation}</t:actionlink>
 				</div>
+		
 				<div class="control-group">
-					<label t:type="label" class="control-label" for="productDescription" />
-					<t:textfield t:id="productDescription" value="product.description" class="span4"/>
+					<div class="span4">
+						<t:select t:id="product" value="registrationProduct" model="getSelectModel('Product')" blankLabel="message:product" class="span6" />
+						<t:actionlink t:id="addProduct" t:zone="productZone" id="addProduct" class="btn btn-link" >${message:add.product}</t:actionlink>
+					</div>
+					<t:select t:id="referer" value="registrationReferer" model="getSelectModel('Referer')" blankLabel="message:referer" class="offset1" />
+					<t:actionlink t:id="addReferer" id="addReferer" t:zone="refererZone" class="btn btn-link">${message:add.referer}</t:actionlink>
 				</div>
-				<div class="form-actions">
+		
+				<div class="control-group">
+					<div class="span4">
+						<t:select t:id="productQuestion" value="registrationProductQuestion" model="getSelectModel('ProductQuestion','question')" blankLabel="message:productQuestion"	class="span6" />
+						<t:actionlink t:id="addProductQuestion" t:zone="productQuestionZone" id="addProductQuestion" class="btn btn-link">${message:add.product.question}</t:actionlink>
+					</div>
+					<t:select t:is="socialContext" value="registrationSocialContext" model="getSelectModel('SocialContext')" blankLabel="message:socialContext" class="offset1" />
+					<t:actionlink t:id="addSocialContext" id="socialContext" t:zone="socialContextZone" class="btn btn-link" >${message:add.social.context}</t:actionlink>
+				</div>
+		
+				<div class="control-group">
+					<div class="span4">
+						<t:select t:id="questionType" value="registration.questionType" model="getSelectModel('QuestionType')" blankLabel="message:questionType-label" class="span12" />
+					</div>
+					<t:select t:id="origin" value="registration.origin" model="getSelectModel('Origin')" blankLabel="message:origin" class="offset1" />
+				</div>
+				
+				<div class="control-group">
+					<div class="bs-docs-example span9" >
+						<h6>${message:third.party.person.title}</h6>
+						<hr />
+						<div class="control-group">
+							<t:select t:id="tpGender" value="registration.tpGender" blankLabel="message:gender" />
+							<t:textfield t:id="tpAge" value="registration.tpAge" placeholder="message:age" class="span1" />
+							<t:select t:id="tpUsageType" value="registration.tpUsageType" model="getSelectModel('UsageType')" blankLabel="message:usageType" class="span4" />
+						</div>
+					</div>
+				</div>
+		
+				<div class="form-actions span9 controls-row" style="margin-left:0;">
 					<div class="btn-toolbar" style="float:right;">
-						<a id="productFormCancel" class="btn">${message:cancel}</a>
+						<t:pagelink page="overviewregistrations" class="btn" >${message:cancel}</t:pagelink>
 						<button type="submit" class="btn btn-primary">${message:save}</button>
 					</div>
-				</div>			
+				</div>
+		
 			</t:form>
+		</t:zone>
+	</t:zone>
+	
+		<div id="dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="dialogLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-header">
+				<h3 id="dialogLabel">${message:registration.saved}</h3>
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-list">
+					<li>
+						<t:actionlink t:id="sendEmail" t:zone="sendEmailZone">${message:send.email}<i t:type="zone" t:id="sendEmailZone" id="sendEmailZone" visible="false" class="icon-ok" ></i></t:actionlink>
+					</li>
+					<li>
+						<t:actionlink t:id="addEvent" t:zone="addEventZone">${message:add.agenda}<i t:type="zone" t:id="addEventZone" id="addEventZone" visible="false" class="icon-ok" ></i></t:actionlink>
+					</li>
+					<li>
+						<t:actionlink t:id="addTask" t:zone="addTaskZone">${message:add.event}<i t:type="zone" t:id="addTaskZone" id="addTaskZone" visible="false" class="icon-ok" ></i></t:actionlink>
+					</li>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<t:pagelink class="btn btn-primary" page="overviewRegistrations" >${message:finish}</t:pagelink>			
+			</div>
 		</div>
-	</div>
+		
+		<div t:type="zone" t:id="productZone" id="productZone">
+			<div id="productDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="productDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
+				<div class="modal-header">
+					<h3 id="productDialogLabel">${message:new.product}</h3>
+				</div>
+				<div class="modal-body">
+					<t:form t:id="productForm" class="form-horizontal" t:zone="topZone" t:validate="product">
+						<div class="control-group">
+							<label t:type="label" class="control-label" for="productName" />
+							<t:textfield t:id="productName" value="product.name" class="span8"/>
+						</div>
+						<div class="control-group">
+							<label t:type="label" class="control-label" for="productDescription" />
+							<t:textarea t:id="productDescription" value="product.description" class="span8"/>
+						</div>
+						<div class="form-actions">
+							<div class="btn-toolbar pull-right">
+								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+								<button type="submit" class="btn btn-primary">${message:save}</button>
+							</div>
+						</div>			
+					</t:form>
+				</div>
+			</div>
+		</div>
+		
+		<div t:type="zone" t:id="productQuestionZone" id="productQuestionZone">
+			<div id="productQuestionDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="productQuestionDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
+				<div class="modal-header">
+					<h3 id="productQuestionDialogLabel">${message:new.productQuestion}</h3>
+				</div>
+				<div class="modal-body">
+					<t:form t:id="productQuestionForm" class="form-horizontal" t:zone="topZone" t:validate="productQuestion">
+						<div class="control-group">
+							<label t:type="label" class="control-label" for="productQuestionName"/>
+							<t:textarea t:id="productQuestionName" value="productQuestion.question" class="span8"/>
+						</div>
+						<div class="form-actions">
+							<div class="btn-toolbar pull-right">
+								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+								<button type="submit" class="btn btn-primary">${message:save}</button>
+							</div>
+						</div>			
+					</t:form>
+				</div>
+			</div>
+		</div>
+		
+		<div t:type="zone" t:id="relationZone" id="relationZone">
+			<div id="relationDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="relationDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
+				<div class="modal-header">
+					<h3 id="relationDialogLabel">${message:new.relation}</h3>
+				</div>
+				<div class="modal-body">
+					<t:form t:id="relationForm" class="form-horizontal" t:zone="topZone" t:validate="relation">
+						<div class="control-group">
+							<label t:type="label" class="control-label" for="relationName" >${message:productName-label}</label>
+							<t:textfield t:id="relationName" value="relation.name" class="span8"/>
+						</div>
+						<div class="form-actions">
+							<div class="btn-toolbar pull-right">
+								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+								<button type="submit" class="btn btn-primary">${message:save}</button>
+							</div>
+						</div>			
+					</t:form>
+				</div>
+			</div>
+		</div>
+		
+		<div t:type="zone" t:id="refererZone" id="refererZone">
+			<div id="refererDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="refererDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
+				<div class="modal-header">
+					<h3 id="refererDialogLabel">${message:new.referer}</h3>
+				</div>
+				<div class="modal-body">
+					<t:form t:id="refererForm" class="form-horizontal" t:zone="topZone" t:validate="referer">
+						<div class="control-group">
+							<label t:type="label" class="control-label" for="refererName" >${message:productName-label}</label>
+							<t:textfield t:id="refererName" value="referer.name" class="span8"/>
+						</div>
+						<div class="form-actions">
+							<div class="btn-toolbar pull-right">
+								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+								<button type="submit" class="btn btn-primary">${message:save}</button>
+							</div>
+						</div>			
+					</t:form>
+				</div>
+			</div>
+		</div>
+		
+		<div t:type="zone" t:id="socialContextZone" id="socialContextZone">
+			<div id="socialContextDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="socialContextDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
+				<div class="modal-header">
+					<h3 id="socialContextDialogLabel">${message:new.socialContext}</h3>
+				</div>
+				<div class="modal-body">
+					<t:form t:id="socialContextForm" class="form-horizontal" t:zone="topZone" t:validate="socialContext">
+						<div class="control-group">
+							<label t:type="label" class="control-label" for="socialContextName" >${message:productName-label}</label>
+							<t:textfield t:id="socialContextName" value="socialContext.name" class="span8"/>
+						</div>
+						<div class="form-actions">
+							<div class="btn-toolbar pull-right">
+								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+								<button type="submit" class="btn btn-primary">${message:save}</button>
+							</div>
+						</div>			
+					</t:form>
+				</div>
+			</div>
+		</div>
 
 </t:layout>
