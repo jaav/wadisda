@@ -226,7 +226,7 @@
 					<systemProperties>
 						<systemProperty>
 							<name>tapestry.execution-mode</name>
-							<value>development</value>
+							<value>Development</value>
 						</systemProperty>
 					</systemProperties>
 				</configuration>
@@ -243,7 +243,18 @@
 				<db.password>root</db.password>
 				<google.clientId>1062672960315.apps.googleusercontent.com</google.clientId>
 				<google.clientSecret>T6Ai0XdXzkNRSG4UvM0uAzRj</google.clientSecret>
-				<google.redirectUri>http://localhost:8080/oauth2callback</google.redirectUri>
+				<prod.base.url>localhost</prod.base.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>jef</id>
+			<properties>
+				<db.url>jdbc:mysql://localhost:3306/wadisda</db.url>
+				<db.user>root</db.user>
+				<db.password>root</db.password>
+				<google.clientId>1062672960315.apps.googleusercontent.com</google.clientId>
+				<google.clientSecret>T6Ai0XdXzkNRSG4UvM0uAzRj</google.clientSecret>
+				<prod.base.url>www.fivegeese.com</prod.base.url>
 			</properties>
 		</profile>
 	</profiles>

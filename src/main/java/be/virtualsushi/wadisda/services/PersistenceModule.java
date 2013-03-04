@@ -1,18 +1,18 @@
 package be.virtualsushi.wadisda.services;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
 
+import org.apache.tapestry5.internal.jpa.PersistenceUnitInfoImpl;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
-import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.jpa.EntityManagerSource;
@@ -46,7 +46,6 @@ public class PersistenceModule {
 		binder.bind(SimpleJpaRepository.class, SimpleJpaRepositoryImpl.class);
 	}
 
-	@EagerLoad
 	public DataSource buildDataSource(final Map<String, String> config, @Symbol("jdbc.url") final String jdbcUrl, @Symbol("jdbc.user") final String user, @Symbol("jdbc.password") final String password) throws NamingException {
 
 		final MysqlDataSource dataSource = new MysqlDataSource();
@@ -55,32 +54,24 @@ public class PersistenceModule {
 		dataSource.setUser(user);
 		dataSource.setPassword(password);
 
-		final Context initialContext = new InitialContext();
-		try {
-			Object context = initialContext.lookup("java:comp/env");
-			Context envContext = null;
-			if (context != null) {
-				envContext = (Context) context;
-			} else {
-				envContext = initialContext.createSubcontext("java:comp/env");
-			}
-			Context jdbcContext = envContext.createSubcontext("jdbc");
-			jdbcContext.bind("wadisda_ds", dataSource);
-		} catch (final NamingException ne) {
-			throw new RuntimeException(ne.getExplanation(), ne);
-		}
-
 		return dataSource;
 	}
 
 	@Contribute(EntityManagerSource.class)
-	public static void configurePersistenceUnitInfos(MappedConfiguration<String, PersistenceUnitConfigurer> cfg) {
+	public static void configurePersistenceUnitInfos(MappedConfiguration<String, PersistenceUnitConfigurer> cfg, final @InjectService("DataSource") DataSource dataSource) {
 
 		PersistenceUnitConfigurer configurer = new PersistenceUnitConfigurer() {
 
 			public void configure(TapestryPersistenceUnitInfo unitInfo) {
 
-				unitInfo.nonJtaDataSource("jdbc/wadisda_ds");
+				try {
+					Field dataSourceField = PersistenceUnitInfoImpl.class.getDeclaredField("nonJtaDataSource");
+					dataSourceField.setAccessible(true);
+					dataSourceField.set(unitInfo, dataSource);
+				} catch (Exception e) {
+					throw new RuntimeException("Unable to set data source", e);
+				}
+
 				unitInfo.addProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 				unitInfo.addProperty("hibernate.hbm2ddl.auto", "update");
 				unitInfo.validationMode(ValidationMode.AUTO);
