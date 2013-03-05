@@ -15,6 +15,7 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.ApplicationDefaults;
 import org.apache.tapestry5.ioc.services.FactoryDefaults;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
@@ -60,7 +61,7 @@ public class AppModule {
 	}
 
 	@FactoryDefaults
-	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
+	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration, @Symbol("base.url") String baseUrl) {
 		// The application version number is incorprated into URLs for some
 		// assets. Web browsers will cache assets because of the far future
 		// expires
@@ -72,6 +73,7 @@ public class AppModule {
 		// DevelopmentModule or
 		// QaModule.
 		configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
+		configuration.override(SymbolConstants.HOSTNAME, baseUrl);
 	}
 
 	@ApplicationDefaults
