@@ -83,4 +83,9 @@ public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 	public void logout() {
 		SecurityUtils.getSubject().logout();
 	}
+
+	@Override
+	public void updateCurrentUserInfo(User user) {
+		((GoogleAccount) SecurityUtils.getSubject().getPrincipal()).updateUser(user);
+	}
 }

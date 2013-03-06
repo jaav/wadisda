@@ -10,9 +10,11 @@ public interface AuthenticationManager {
 
 	void authorize(String userId);
 
- 	Credential getCurrentUserCredential();
+	Credential getCurrentUserCredential();
 
 	User getCurrentUser();
+
+	void updateCurrentUserInfo(User user);
 
 	void logout();
 

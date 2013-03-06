@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import be.virtualsushi.wadisda.entities.enums.Genders;
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;

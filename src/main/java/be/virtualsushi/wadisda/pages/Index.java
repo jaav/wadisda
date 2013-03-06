@@ -15,6 +15,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.slf4j.Logger;
 
+import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.entities.enums.Roles;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
 import com.google.api.client.http.HttpTransport;
@@ -62,6 +64,18 @@ public class Index {
 	private SimpleDateFormat dateFormat;
 
 	private SimpleDateFormat timeFormat;
+
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object onActivate() {
+		User currentUser = authenticationManager.getCurrentUser();
+		if (!currentUser.hasRole(Roles.ADMIN) && !currentUser.hasRole(Roles.USER)) {
+			return Forbidden.class;
+		}
+		if (!currentUser.isActive()) {
+			return NotActivated.class;
+		}
+		return null;
+	}
 
 	@OnEvent(value = EventConstants.PROGRESSIVE_DISPLAY, component = "calendarsList")
 	public void onCalendarsListLoad() {

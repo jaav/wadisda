@@ -4,7 +4,7 @@ import be.virtualsushi.wadisda.entities.User;
 
 public class GoogleAccount {
 
-	private final User user;
+	private User user;
 	private final String googleUserId;
 
 	public GoogleAccount(User user, String googleUserId) {
@@ -18,6 +18,10 @@ public class GoogleAccount {
 
 	public String getGoogleUserId() {
 		return googleUserId;
+	}
+
+	public void updateUser(User user) {
+		this.user = user;
 	}
 
 }

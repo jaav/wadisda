@@ -1,0 +1,5 @@
+<!DOCTYPE html>
+<t:layout title="${message:title}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+</t:layout>

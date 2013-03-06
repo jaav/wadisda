@@ -17,6 +17,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.entities.enums.Roles;
 import be.virtualsushi.wadisda.pages.Index;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
@@ -43,7 +44,7 @@ public class Layout {
 	@Inject
 	@Symbol(SymbolConstants.APPLICATION_VERSION)
 	private String appVersion;
-	
+
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
@@ -69,10 +70,15 @@ public class Layout {
 		}
 		return "";
 	}
-	
+
 	@AfterRender
-	public void onAfterRender(){
+	public void onAfterRender() {
 		javaScriptSupport.addInitializerCall("initFormSelectors", "");
+		javaScriptSupport.addInitializerCall("initTooltips", "");
+	}
+
+	public boolean isAdmin() {
+		return getCurrentUser().hasRole(Roles.ADMIN);
 	}
 
 }

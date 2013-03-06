@@ -34,6 +34,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
+import be.virtualsushi.wadisda.services.google.GoogleClientSource;
+import be.virtualsushi.wadisda.services.google.impl.GoogleClientSourceImpl;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.impl.CustomValidationDecorator;
 import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
@@ -58,10 +60,11 @@ public class AppModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(TaskService.class, TaskServiceImpl.class);
 		binder.bind(TaskEndpointFactory.class, TaskEndpointFactoryImpl.class);
+		binder.bind(GoogleClientSource.class, GoogleClientSourceImpl.class);
 	}
 
 	@FactoryDefaults
-	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration, @Symbol("base.url") String baseUrl) {
+	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration, @Symbol("base.url") String baseUrl, @Symbol("base.port") String basePort) {
 		// The application version number is incorprated into URLs for some
 		// assets. Web browsers will cache assets because of the far future
 		// expires
@@ -74,6 +77,7 @@ public class AppModule {
 		// QaModule.
 		configuration.override(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
 		configuration.override(SymbolConstants.HOSTNAME, baseUrl);
+		configuration.override(SymbolConstants.HOSTPORT, basePort);
 	}
 
 	@ApplicationDefaults

@@ -21,7 +21,6 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.corelib.base.AbstractField;
-import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
@@ -173,7 +172,6 @@ public class BootstrapDateField extends AbstractField {
 			value = formatCurrentValue();
 
 		String clientId = getClientId();
-		String triggerId = clientId + "-trigger";
 
 		writer.element("div", "class", "input-append");
 

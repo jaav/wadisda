@@ -4,10 +4,11 @@ import javax.inject.Inject;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.SimpleAccount;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
 import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.entities.enums.Roles;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.security.GoogleAccount;
 
@@ -27,9 +28,11 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			user.setEmail(userInfo.getEmail());
 			user.setName(userInfo.getName());
 			user.setAvatarUrl(userInfo.getPicture());
+			user.addRole(Roles.USER);
+			user.setActive(false);
 			userRepository.save(user);
 		}
-		return new SimpleAuthenticationInfo(new GoogleAccount(user, (String) remotePrincipal), authenticationToken.getCredentials(), realmName);
+		return new SimpleAccount(new GoogleAccount(user, (String) remotePrincipal), authenticationToken.getCredentials(), realmName);
 	}
 
 }

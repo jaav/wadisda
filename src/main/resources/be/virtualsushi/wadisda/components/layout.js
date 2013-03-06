@@ -5,6 +5,10 @@
 		$("select").on('change keyup', colorizeSelect).change();
 	};
 	
+	Tapestry.Initializer.initTooltips = function(){
+		$("[data-toggle=tooltip]").tooltip();
+	};
+	
 	function colorizeSelect() {
 		if ($(this).val() == "")
 			$(this).addClass("empty");
