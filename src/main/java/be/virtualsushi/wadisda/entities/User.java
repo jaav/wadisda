@@ -48,6 +48,9 @@ public class User extends IdNameEntity {
 	@Embedded
 	private TasksListInfo tasksList;
 
+	@Column(name = "agreement_accepted")
+	private boolean agreementAccepted;
+
 	public String getEmail() {
 		return email;
 	}
@@ -111,6 +114,14 @@ public class User extends IdNameEntity {
 
 	public void setCalendar(CalendarInfo calendar) {
 		this.calendar = calendar;
+	}
+
+	public boolean isAgreementAccepted() {
+		return agreementAccepted;
+	}
+
+	public void setAgreementAccepted(boolean agreementAccepted) {
+		this.agreementAccepted = agreementAccepted;
 	}
 
 }

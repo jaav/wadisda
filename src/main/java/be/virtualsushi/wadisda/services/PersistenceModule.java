@@ -74,7 +74,7 @@ public class PersistenceModule {
 
 				unitInfo.addProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 				unitInfo.addProperty("hibernate.hbm2ddl.auto", "update");
-				unitInfo.validationMode(ValidationMode.AUTO);
+				unitInfo.validationMode(ValidationMode.NONE);
 			}
 		};
 

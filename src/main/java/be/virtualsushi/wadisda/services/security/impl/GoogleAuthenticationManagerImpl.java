@@ -27,10 +27,10 @@ public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 	@Inject
 	private Response response;
 
-	private Logger logger;
-
 	@Inject
 	private LinkSource linkSource;
+
+	private Logger logger;
 
 	private String redirectUrl;
 

@@ -34,8 +34,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
-import be.virtualsushi.wadisda.services.google.GoogleClientSource;
-import be.virtualsushi.wadisda.services.google.impl.GoogleClientSourceImpl;
+import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
+import be.virtualsushi.wadisda.services.google.impl.GoogleApiClientSourceImpl;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.impl.CustomValidationDecorator;
 import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
@@ -60,7 +60,7 @@ public class AppModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(TaskService.class, TaskServiceImpl.class);
 		binder.bind(TaskEndpointFactory.class, TaskEndpointFactoryImpl.class);
-		binder.bind(GoogleClientSource.class, GoogleClientSourceImpl.class);
+		binder.bind(GoogleApiClientSource.class, GoogleApiClientSourceImpl.class);
 	}
 
 	@FactoryDefaults

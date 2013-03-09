@@ -6,20 +6,15 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import be.virtualsushi.wadisda.entities.enums.TaskTypes;
+import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.tasks.TaskEndpoint;
 import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
 
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-
 public class TaskEndpointFactoryImpl implements TaskEndpointFactory {
 
 	@Inject
-	private HttpTransport httpTransport;
-
-	@Inject
-	private JsonFactory jsonFactory;
+	private GoogleApiClientSource googleApiClientSource;
 
 	@Inject
 	private AuthenticationManager authenticationManager;
@@ -38,13 +33,13 @@ public class TaskEndpointFactoryImpl implements TaskEndpointFactory {
 		TaskEndpoint result = null;
 		switch (type) {
 		case CALENDAR_EVENT:
-			result = new GoogleCalendarTaskEndpointImpl(httpTransport, jsonFactory, authenticationManager);
+			result = new GoogleCalendarTaskEndpointImpl(googleApiClientSource, authenticationManager);
 			break;
 		case SEND_EMAIL:
 			result = new EmailTaskEndpointImpl();
 			break;
 		case TODO_TASK:
-			result = new GoogleTasksEndpointImpl(httpTransport, jsonFactory);
+			result = new GoogleTasksEndpointImpl(googleApiClientSource);
 			break;
 		}
 		if (result != null) {

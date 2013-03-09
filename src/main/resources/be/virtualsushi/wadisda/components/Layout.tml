@@ -192,5 +192,24 @@
 				</div>
 			</div>
 		</div>
+		
+		<t:if test="agreementNotAccepted">
+			<div t:type="zone" t:id="agreementZone" id="agreementZone">
+					<div id="agreementDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="agreementDialogLabel" aria-hidden="true" data-backdrop="static">
+						<div class="modal-header">
+							<h3 id="agreementDialogLabel">${message:agreement.label}</h3>
+						</div>
+						<div class="modal-body">
+							<h5>${message:agreement.title}</h5>
+							<p>${message:agreement.text}</p>
+						</div>
+						<div class="modal-footer">
+							<t:actionlink t:id="accept" class="btn btn-success">${message:accept}</t:actionlink>
+							<t:pagelink class="btn btn-danger" page="forbidden" >${message:decline}</t:pagelink>			
+						</div>
+					</div>
+			</div>
+		</t:if>
+		
 	</body>
 </html>

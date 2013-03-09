@@ -4,10 +4,9 @@
       xmlns:p="tapestry:parameter">
       
       <t:grid source="registrations" row="registration" model="registrationModel" include="id,epoch,time,question" class="table table-hover" lean="true">
-
-	      <p:idCell>
-           <t:pagelink page="editRegistration" context="registration.id.toString()">${registration.id}</t:pagelink>
-       </p:idCell>
+		<p:idCell>
+        	<t:pagelink page="editRegistration" context="registration.id.toString()">${registration.id}</t:pagelink>
+       	</p:idCell>
       	<p:empty>
 			<span class="badge badge-important">${message:empty.data}</span>      		
       	</p:empty>

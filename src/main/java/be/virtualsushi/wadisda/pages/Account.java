@@ -16,7 +16,7 @@ import org.apache.tapestry5.services.SelectModelFactory;
 import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.entities.valueobjects.CalendarInfo;
 import be.virtualsushi.wadisda.entities.valueobjects.TasksListInfo;
-import be.virtualsushi.wadisda.services.google.GoogleClientSource;
+import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
@@ -33,7 +33,7 @@ public class Account {
 	private SelectModelFactory selectModelFactory;
 
 	@Inject
-	private GoogleClientSource googleClientSource;
+	private GoogleApiClientSource googleClientSource;
 
 	@Inject
 	private AuthenticationManager authenticationManager;

@@ -2,7 +2,7 @@ package be.virtualsushi.wadisda.services.google.impl;
 
 import javax.inject.Inject;
 
-import be.virtualsushi.wadisda.services.google.GoogleClientSource;
+import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.HttpTransport;
@@ -10,7 +10,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.tasks.Tasks;
 
-public class GoogleClientSourceImpl implements GoogleClientSource {
+public class GoogleApiClientSourceImpl implements GoogleApiClientSource {
 
 	@Inject
 	private HttpTransport httpTransport;

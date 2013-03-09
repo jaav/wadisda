@@ -9,16 +9,20 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.entities.enums.Roles;
-import be.virtualsushi.wadisda.pages.Index;
+import be.virtualsushi.wadisda.pages.Login;
+import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
 /**
@@ -38,7 +42,13 @@ public class Layout {
 	private ComponentResources resources;
 
 	@Inject
+	private Request request;
+
+	@Inject
 	private AuthenticationManager authenticationManager;
+
+	@Inject
+	private UserRepository userRepository;
 
 	@Property
 	@Inject
@@ -48,10 +58,25 @@ public class Layout {
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;
 
+	@InjectComponent
+	private Zone agreementZone;
+
 	@OnEvent(value = EventConstants.ACTION, component = "logout")
 	public Object onActionFromLogout() {
 		authenticationManager.logout();
-		return Index.class;
+		return Login.class;
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "accept")
+	public Object onActionFromAccept() {
+		User currentUser = userRepository.findOne(authenticationManager.getCurrentUser().getId());
+		currentUser.setAgreementAccepted(true);
+		userRepository.save(currentUser);
+		authenticationManager.updateCurrentUserInfo(currentUser);
+		if (request.isXHR()) {
+			return agreementZone;
+		}
+		return null;
 	}
 
 	public User getCurrentUser() {
@@ -75,10 +100,17 @@ public class Layout {
 	public void onAfterRender() {
 		javaScriptSupport.addInitializerCall("initFormSelectors", "");
 		javaScriptSupport.addInitializerCall("initTooltips", "");
+		if (isAgreementNotAccepted()) {
+			javaScriptSupport.addInitializerCall("initAgreement", "");
+		}
 	}
 
 	public boolean isAdmin() {
 		return getCurrentUser().hasRole(Roles.ADMIN);
+	}
+
+	public boolean isAgreementNotAccepted() {
+		return !getCurrentUser().isAgreementAccepted();
 	}
 
 }
