@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.pages;
+package be.virtualsushi.wadisda.pages.registrations;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.valueobjects.RegistrationTimePropertyConduit;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
 
-public class OverviewRegistrations {
+public class Overview {
 
 	@Inject
 	private RegistrationRepository registrationRepository;

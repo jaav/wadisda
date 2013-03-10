@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html t:type="layout" title="${message:title}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+	<ul>
+		<li t:type="infinitescroll" row="user" scroller="scroller" zone="zone">
+
+			<li>${user.name}</li>
+		</li>
+		<li class="zone" t:type="zone" t:id="zone" />
+	</ul>
+	<div id="scroller"></div>
+
+</html>

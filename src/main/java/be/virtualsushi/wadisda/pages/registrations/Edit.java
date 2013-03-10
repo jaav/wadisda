@@ -1,4 +1,4 @@
-package be.virtualsushi.wadisda.pages;
+package be.virtualsushi.wadisda.pages.registrations;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -39,7 +39,7 @@ import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.tasks.TaskService;
 
 @Import(library = { "edit-registration.js" })
-public class EditRegistration {
+public class Edit {
 
 	@Inject
 	private ListJpaRepository listJpaRepository;
@@ -96,7 +96,7 @@ public class EditRegistration {
 	private SocialContext socialContext;
 
 	@InjectComponent
-	private Zone modalZone, sendEmailZone, addEventZone, addTaskZone, topZone, productZone, productQuestionZone, relationZone, refererZone, socialContextZone;
+	private Zone modalZone, topZone, productZone, productQuestionZone, relationZone, refererZone, socialContextZone;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String context) {
@@ -121,23 +121,23 @@ public class EditRegistration {
 		return registration.isNew() ? "new" : String.valueOf(registration.getId());
 	}
 
-	@OnEvent(value = EventConstants.ACTION, component = "sendEmail")
-	public Object onActionFromSendEmail() {
-		createTask(TaskTypes.SEND_EMAIL);
-		return ajaxReturnWithGracefullFallback(sendEmailZone);
-	}
-
-	@OnEvent(value = EventConstants.ACTION, component = "addEvent")
-	public Object onActionFromAddEvent() {
-		createTask(TaskTypes.CALENDAR_EVENT);
-		return ajaxReturnWithGracefullFallback(addEventZone);
-	}
-
-	@OnEvent(value = EventConstants.ACTION, component = "addTask")
-	public Object onActionFromAddTask() {
-		createTask(TaskTypes.TODO_TASK);
-		return ajaxReturnWithGracefullFallback(addTaskZone);
-	}
+//	@OnEvent(value = EventConstants.ACTION, component = "sendEmail")
+//	public Object onActionFromSendEmail() {
+//		createTask(TaskTypes.SEND_EMAIL);
+//		return ajaxReturnWithGracefullFallback(sendEmailZone);
+//	}
+//
+//	@OnEvent(value = EventConstants.ACTION, component = "addEvent")
+//	public Object onActionFromAddEvent() {
+//		createTask(TaskTypes.CALENDAR_EVENT);
+//		return ajaxReturnWithGracefullFallback(addEventZone);
+//	}
+//
+//	@OnEvent(value = EventConstants.ACTION, component = "addTask")
+//	public Object onActionFromAddTask() {
+//		createTask(TaskTypes.TODO_TASK);
+//		return ajaxReturnWithGracefullFallback(addTaskZone);
+//	}
 
 	private void createTask(TaskTypes type) {
 		taskService.createTask(type, registration.getUser(), registration.getUser(), registration.getQuestion(), DateUtils.addDays(new Date(), 7), registration);

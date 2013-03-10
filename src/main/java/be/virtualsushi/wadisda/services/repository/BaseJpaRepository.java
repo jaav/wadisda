@@ -18,4 +18,6 @@ public interface BaseJpaRepository<T extends BaseEntity> {
 
 	T findOne(Long id);
 
+	List<T> list(int offset, int count);
+
 }

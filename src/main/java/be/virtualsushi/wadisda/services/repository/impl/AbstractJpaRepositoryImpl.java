@@ -38,4 +38,9 @@ public abstract class AbstractJpaRepositoryImpl<T extends BaseEntity> extends Li
 		return getEntityManager().find(persistedClass, id);
 	}
 
+	@Override
+	public List<T> list(int offset, int count) {
+		return getValuesList(persistedClass, offset, count);
+	}
+
 }

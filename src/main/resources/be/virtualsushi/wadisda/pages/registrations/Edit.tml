@@ -86,7 +86,7 @@
 		
 				<div class="form-actions span9 controls-row" style="margin-left:0;">
 					<div class="btn-toolbar" style="float:right;">
-						<t:pagelink page="overviewregistrations" class="btn" >${message:cancel}</t:pagelink>
+						<t:pagelink page="registrations/overview" class="btn" >${message:cancel}</t:pagelink>
 						<button type="submit" class="btn btn-primary">${message:save}</button>
 					</div>
 				</div>
@@ -102,18 +102,18 @@
 			<div class="modal-body">
 				<ul class="nav nav-list">
 					<li>
-						<t:actionlink t:id="sendEmail" t:zone="sendEmailZone">${message:send.email}<i t:type="zone" t:id="sendEmailZone" id="sendEmailZone" visible="false" class="icon-ok" ></i></t:actionlink>
+						<t:pagelink t:page="sendMessage" t:context="0">${message:send.email}</t:pagelink>
 					</li>
 					<li>
-						<t:actionlink t:id="addEvent" t:zone="addEventZone">${message:add.agenda}<i t:type="zone" t:id="addEventZone" id="addEventZone" visible="false" class="icon-ok" ></i></t:actionlink>
+						<t:pagelink t:page="sendMessage" t:context="1">${message:add.agenda}</t:pagelink>
 					</li>
 					<li>
-						<t:actionlink t:id="addTask" t:zone="addTaskZone">${message:add.event}<i t:type="zone" t:id="addTaskZone" id="addTaskZone" visible="false" class="icon-ok" ></i></t:actionlink>
+						<t:pagelink t:page="sendMessage" t:context="2">${message:add.event}</t:pagelink>
 					</li>
 				</ul>
 			</div>
 			<div class="modal-footer">
-				<t:pagelink class="btn btn-primary" page="overviewRegistrations" >${message:finish}</t:pagelink>			
+				<t:pagelink class="btn btn-primary" page="registrations/overview" >${message:finish}</t:pagelink>			
 			</div>
 		</div>
 		

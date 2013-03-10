@@ -56,16 +56,16 @@
 								</a>
 							</div>
 							<div id="collapse0"
-								class="accordion-body collapse ${getMenuCategoryClass(['editRegistration','overviewRegistrations'])}">
+								class="accordion-body collapse ${getMenuCategoryClass(['registrations/edit','registrations/overview'])}">
 								<div class="accordion-inner">
 									<ul class="nav nav-list">
-										<li class="${getMenuItemClass('editRegistration')}">
-											<t:pagelink page="editRegistration" context="literal:new">
+										<li class="${getMenuItemClass('registrations/edit')}">
+											<t:pagelink page="registrations/edit" context="literal:new">
 												<i class="icon-chevron-right" />&nbsp;${message:new}
 											</t:pagelink>
 										</li>
-										<li class="${getMenuItemClass('overviewRegistrations')}">
-											<t:pagelink page="overviewRegistrations">
+										<li class="${getMenuItemClass('registrations/overview')}">
+											<t:pagelink page="registrations/overview">
 												<i class="icon-chevron-right" />&nbsp;${message:overview}
 											</t:pagelink>
 										</li>
