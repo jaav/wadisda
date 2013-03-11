@@ -2,13 +2,57 @@
 <html t:type="layout" title="${message:title}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-	<ul>
-		<li t:type="infinitescroll" row="user" scroller="scroller" zone="zone">
-
-			<li>${user.name}</li>
-		</li>
-		<li class="zone" t:type="zone" t:id="zone" />
-	</ul>
-	<div id="scroller"></div>
+	<t:zone t:id="activeCheckboxZone" update="show">
+		<t:form t:id="messageForm" class="form-horizontal">
+				<div class="fluid-row">
+					<div class="span4" style="height:200px; overflow: scroll;">
+						<table class="table table-hover span10">
+							<t:infinitescroll t:row="user" t:scroller="scroller"
+								zone="zone">
+								<tr>
+									<td>
+										<t:ajaxcheckbox t:id="activeCheckbox" t:value="isUserAttended(user)"
+											t:clientEvent="click" t:event="change" t:context="user.id"
+											t:zone="activeCheckboxZone" />
+									</td>
+									<td>
+										<div class="thumbnail span2">
+											<img src="${user.avatarUrl}" />
+										</div>
+									</td>
+									<td>
+										${user.name}
+									</td>
+								</tr>
+							</t:infinitescroll>
+							<tr class="zone" t:type="zone" t:id="zone"></tr>
+						</table>
+						<div id="scroller"></div>
+					</div>
+	
+					<div class="span8">
+						<div class="control-group">
+							<t:textfield t:id="title" value="message.title"	placeholder="message:message.title" validate="required" class="span7" />
+						</div>
+						<div class="control-group">
+							<t:textarea t:id="description" value="message.description" placeholder="message:message.description" validate="required" class="span7" />
+						</div>
+						<div class="control-group">
+							<t:datefield t:id="dueDate" value="message.dueDate" placeholder="message:message.duedate" validate="required" />
+						</div>
+						<div>
+							<t:textfield t:id="status" value="message.status" placeholder="message:message.status" validate="required" />
+						</div>
+					</div>
+				</div>
+			
+				<div class="form-actions span9 controls-row" style="margin-left:0;">
+					<div class="btn-toolbar" style="float:right;">
+						<t:pagelink page="registrations/overview" class="btn" >${message:cancel}</t:pagelink>
+						<button type="submit" class="btn btn-primary">${message:save}</button>
+					</div>
+				</div>
+		</t:form>
+	</t:zone>
 
 </html>

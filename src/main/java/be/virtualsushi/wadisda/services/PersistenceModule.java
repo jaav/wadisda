@@ -20,12 +20,14 @@ import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
 import org.apache.tapestry5.jpa.PersistenceUnitConfigurer;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 
+import be.virtualsushi.wadisda.services.repository.GoogleApiCredentialRepository;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
 import be.virtualsushi.wadisda.services.repository.ProductRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
 import be.virtualsushi.wadisda.services.repository.SimpleJpaRepository;
 import be.virtualsushi.wadisda.services.repository.TaskRepository;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
+import be.virtualsushi.wadisda.services.repository.impl.GoogleApiCredentialRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.ListJpaRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.ProductRepositoryImpl;
 import be.virtualsushi.wadisda.services.repository.impl.RegistrationRepositoryImpl;
@@ -44,6 +46,7 @@ public class PersistenceModule {
 		binder.bind(TaskRepository.class, TaskRepositoryImpl.class);
 		binder.bind(ProductRepository.class, ProductRepositoryImpl.class);
 		binder.bind(SimpleJpaRepository.class, SimpleJpaRepositoryImpl.class);
+		binder.bind(GoogleApiCredentialRepository.class, GoogleApiCredentialRepositoryImpl.class);
 	}
 
 	public DataSource buildDataSource(final Map<String, String> config, @Symbol("jdbc.url") final String jdbcUrl, @Symbol("jdbc.user") final String user, @Symbol("jdbc.password") final String password) throws NamingException {
@@ -74,6 +77,7 @@ public class PersistenceModule {
 
 				unitInfo.addProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 				unitInfo.addProperty("hibernate.hbm2ddl.auto", "update");
+				unitInfo.addProperty("hibernate.show_sql", "true");
 				unitInfo.validationMode(ValidationMode.NONE);
 			}
 		};

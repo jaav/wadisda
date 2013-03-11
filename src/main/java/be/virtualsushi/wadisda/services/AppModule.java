@@ -38,10 +38,11 @@ import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 import be.virtualsushi.wadisda.services.google.impl.GoogleApiClientSourceImpl;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.impl.CustomValidationDecorator;
-import be.virtualsushi.wadisda.services.tasks.TaskEndpointFactory;
-import be.virtualsushi.wadisda.services.tasks.TaskService;
-import be.virtualsushi.wadisda.services.tasks.impl.TaskEndpointFactoryImpl;
-import be.virtualsushi.wadisda.services.tasks.impl.TaskServiceImpl;
+import be.virtualsushi.wadisda.services.messages.MessageService;
+import be.virtualsushi.wadisda.services.messages.impl.EmailMessageEndpointImpl;
+import be.virtualsushi.wadisda.services.messages.impl.GoogleCalendarMessageEndpointImpl;
+import be.virtualsushi.wadisda.services.messages.impl.GoogleTasksMessageEndpointImpl;
+import be.virtualsushi.wadisda.services.messages.impl.MessageServiceImpl;
 import be.virtualsushi.wadisda.services.translators.TimeValueTranslator;
 
 import com.google.api.client.http.HttpTransport;
@@ -58,9 +59,11 @@ import com.google.api.client.json.jackson.JacksonFactory;
 public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
-		binder.bind(TaskService.class, TaskServiceImpl.class);
-		binder.bind(TaskEndpointFactory.class, TaskEndpointFactoryImpl.class);
+		binder.bind(MessageService.class, MessageServiceImpl.class);
 		binder.bind(GoogleApiClientSource.class, GoogleApiClientSourceImpl.class);
+		binder.bind(EmailMessageEndpointImpl.class).withId("emailMessageEndpoint");
+		binder.bind(GoogleCalendarMessageEndpointImpl.class).withId("googleCalendarMessageEndpoint");
+		binder.bind(GoogleTasksMessageEndpointImpl.class).withId("googleTasksMessageEndpoint");
 	}
 
 	@FactoryDefaults

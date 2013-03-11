@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import be.virtualsushi.wadisda.entities.enums.TaskStatuses;
-import be.virtualsushi.wadisda.entities.enums.TaskTypes;
+import be.virtualsushi.wadisda.entities.enums.MessageTypes;
 
 @Entity
 @Table(name = "task")
@@ -49,7 +49,7 @@ public class Task extends IdNameEntity {
 
 	@Column(name = "task_type")
 	@Enumerated(EnumType.ORDINAL)
-	private TaskTypes taskType;
+	private MessageTypes taskType;
 
 	@ManyToOne
 	@JoinColumn(name = "registration")
@@ -119,11 +119,11 @@ public class Task extends IdNameEntity {
 		this.status = status;
 	}
 
-	public TaskTypes getTaskType() {
+	public MessageTypes getTaskType() {
 		return taskType;
 	}
 
-	public void setTaskType(TaskTypes taskType) {
+	public void setTaskType(MessageTypes taskType) {
 		this.taskType = taskType;
 	}
 

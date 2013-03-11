@@ -30,8 +30,9 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			user.setAvatarUrl(userInfo.getPicture());
 			user.addRole(Roles.USER);
 			user.setActive(false);
-			userRepository.save(user);
 		}
+		user.setGoogleUserId((String) remotePrincipal);
+		userRepository.save(user);
 		return new SimpleAccount(new GoogleAccount(user, (String) remotePrincipal), authenticationToken.getCredentials(), realmName);
 	}
 

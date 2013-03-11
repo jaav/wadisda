@@ -102,13 +102,13 @@
 			<div class="modal-body">
 				<ul class="nav nav-list">
 					<li>
-						<t:pagelink t:page="sendMessage" t:context="0">${message:send.email}</t:pagelink>
+						<t:actionlink t:id="sendMessageEmail" >${message:send.email}</t:actionlink>
 					</li>
 					<li>
-						<t:pagelink t:page="sendMessage" t:context="1">${message:add.agenda}</t:pagelink>
+						<t:actionlink t:id="sendMessageEvent" >${message:add.agenda}</t:actionlink>
 					</li>
 					<li>
-						<t:pagelink t:page="sendMessage" t:context="2">${message:add.event}</t:pagelink>
+						<t:actionlink t:id="sendMessageTask" >${message:add.event}</t:actionlink>
 					</li>
 				</ul>
 			</div>

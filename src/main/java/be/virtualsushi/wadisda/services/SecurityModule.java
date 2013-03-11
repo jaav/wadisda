@@ -22,9 +22,10 @@ import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.security.impl.GoogleAuthenticationManagerImpl;
 import be.virtualsushi.wadisda.services.security.impl.GoogleFederatedAccountServiceImpl;
 import be.virtualsushi.wadisda.services.security.impl.GoogleRealm;
+import be.virtualsushi.wadisda.services.security.impl.RepositoryCredentialStoreImpl;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.MemoryCredentialStore;
+import com.google.api.client.auth.oauth2.CredentialStore;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -39,6 +40,7 @@ public class SecurityModule {
 		binder.bind(FederatedAccountService.class, GoogleFederatedAccountServiceImpl.class);
 		binder.bind(AuthenticationManager.class, GoogleAuthenticationManagerImpl.class);
 		binder.bind(AuthenticatingRealm.class, GoogleRealm.class).withId("GoogleRealm");
+		binder.bind(CredentialStore.class, RepositoryCredentialStoreImpl.class).withId("CredentialStore");
 	}
 
 	@ApplicationDefaults
@@ -60,9 +62,10 @@ public class SecurityModule {
 		configuration.add(googleRealm);
 	}
 
-	public AuthorizationCodeFlow buildAuthorizationCodeFlow(HttpTransport httpTransport, JsonFactory jsonFactory, @Symbol("google.client.id") String clientId, @Symbol("google.client.secret") String clientSecret) {
+	public AuthorizationCodeFlow buildAuthorizationCodeFlow(HttpTransport httpTransport, JsonFactory jsonFactory, @InjectService("CredentialStore") CredentialStore credentialStore, @Symbol("google.client.id") String clientId,
+			@Symbol("google.client.secret") String clientSecret) {
 		return new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientId, clientSecret, ImmutableList.of(Oauth2Scopes.USERINFO_EMAIL, Oauth2Scopes.USERINFO_PROFILE, CalendarScopes.CALENDAR, TasksScopes.TASKS))
-				.setCredentialStore(new MemoryCredentialStore()).build();
+				.setCredentialStore(credentialStore).build();
 	}
 
 }

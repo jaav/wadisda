@@ -14,6 +14,7 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beanvalidator.BeanValidatorSource;
@@ -29,14 +30,14 @@ import be.virtualsushi.wadisda.entities.Referer;
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.Relation;
 import be.virtualsushi.wadisda.entities.SocialContext;
-import be.virtualsushi.wadisda.entities.enums.TaskTypes;
+import be.virtualsushi.wadisda.entities.enums.MessageTypes;
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
+import be.virtualsushi.wadisda.pages.SendMessage;
 import be.virtualsushi.wadisda.services.repository.ListJpaRepository;
 import be.virtualsushi.wadisda.services.repository.ProductRepository;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
 import be.virtualsushi.wadisda.services.repository.SimpleJpaRepository;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
-import be.virtualsushi.wadisda.services.tasks.TaskService;
 
 @Import(library = { "edit-registration.js" })
 public class Edit {
@@ -58,9 +59,6 @@ public class Edit {
 
 	@Inject
 	private Request request;
-
-	@Inject
-	private TaskService taskService;
 
 	@Inject
 	private AuthenticationManager authenticationManager;
@@ -98,6 +96,9 @@ public class Edit {
 	@InjectComponent
 	private Zone modalZone, topZone, productZone, productQuestionZone, relationZone, refererZone, socialContextZone;
 
+	@InjectPage
+	private SendMessage sendMessagePage;
+
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String context) {
 		product = new Product();
@@ -121,26 +122,25 @@ public class Edit {
 		return registration.isNew() ? "new" : String.valueOf(registration.getId());
 	}
 
-//	@OnEvent(value = EventConstants.ACTION, component = "sendEmail")
-//	public Object onActionFromSendEmail() {
-//		createTask(TaskTypes.SEND_EMAIL);
-//		return ajaxReturnWithGracefullFallback(sendEmailZone);
-//	}
-//
-//	@OnEvent(value = EventConstants.ACTION, component = "addEvent")
-//	public Object onActionFromAddEvent() {
-//		createTask(TaskTypes.CALENDAR_EVENT);
-//		return ajaxReturnWithGracefullFallback(addEventZone);
-//	}
-//
-//	@OnEvent(value = EventConstants.ACTION, component = "addTask")
-//	public Object onActionFromAddTask() {
-//		createTask(TaskTypes.TODO_TASK);
-//		return ajaxReturnWithGracefullFallback(addTaskZone);
-//	}
+	@OnEvent(value = EventConstants.ACTION, component = "sendMessageEmail")
+	public Object onActionFromSendEmail() {
+		return redirectToSendMessage(MessageTypes.EMAIL);
+	}
 
-	private void createTask(TaskTypes type) {
-		taskService.createTask(type, registration.getUser(), registration.getUser(), registration.getQuestion(), DateUtils.addDays(new Date(), 7), registration);
+	@OnEvent(value = EventConstants.ACTION, component = "sendMessageEvent")
+	public Object onActionFromAddEvent() {
+		return redirectToSendMessage(MessageTypes.EVENT);
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "sendMessageTask")
+	public Object onActionFromAddTask() {
+		return redirectToSendMessage(MessageTypes.TASK);
+	}
+
+	private Object redirectToSendMessage(MessageTypes taskType) {
+		sendMessagePage.setRegistration(registration);
+		sendMessagePage.setTaskType(taskType);
+		return sendMessagePage;
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "registrationForm")

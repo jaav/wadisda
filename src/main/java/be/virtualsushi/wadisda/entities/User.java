@@ -51,6 +51,9 @@ public class User extends IdNameEntity {
 	@Column(name = "agreement_accepted")
 	private boolean agreementAccepted;
 
+	@Column(name = "google_user_id")
+	private String googleUserId;
+
 	public String getEmail() {
 		return email;
 	}
@@ -122,6 +125,14 @@ public class User extends IdNameEntity {
 
 	public void setAgreementAccepted(boolean agreementAccepted) {
 		this.agreementAccepted = agreementAccepted;
+	}
+
+	public String getGoogleUserId() {
+		return googleUserId;
+	}
+
+	public void setGoogleUserId(String googleUserId) {
+		this.googleUserId = googleUserId;
 	}
 
 }

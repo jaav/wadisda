@@ -47,7 +47,6 @@ public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 	public void requestAuthorization() {
 		try {
 			response.sendRedirect(authorizationCodeFlow.newAuthorizationUrl().setRedirectUri(redirectUrl).build());
-
 		} catch (IOException e) {
 			logger.error("Unable to request google authorization.", e);
 		}
