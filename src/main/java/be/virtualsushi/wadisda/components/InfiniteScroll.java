@@ -22,14 +22,14 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 @Import(library = { "jquery.scrollExtend.min.js", "infinite-scroll.js" })
-public class InfiniteScroll implements ClientElement {
+public class InfiniteScroll<T> implements ClientElement {
 
 	@Component(publishParameters = "encoder, formState, element, index, empty")
-	private Loop<?> loop;
+	private Loop<T> loop;
 
 	@Parameter
 	@Property
-	private Object row;
+	private T row;
 
 	@Parameter(value = "prop:componentResources.id", defaultPrefix = BindingConstants.LITERAL)
 	private String clientId;
@@ -77,12 +77,12 @@ public class InfiniteScroll implements ClientElement {
 		return nextPageBlock;
 	}
 
-	public List<?> getNextPage() {
-		CaptureResultCallback<List<Object>> resultCallback = new CaptureResultCallback<List<Object>>();
+	public List<T> getNextPage() {
+		CaptureResultCallback<List<T>> resultCallback = new CaptureResultCallback<List<T>>();
 		resources.triggerEvent("nextPage", new Object[] { index }, resultCallback);
 
-		List<?> result = resultCallback.getResult();
-		result = (result == null ? new ArrayList<Object>() : result);
+		List<T> result = resultCallback.getResult();
+		result = (result == null ? new ArrayList<T>() : result);
 
 		return result;
 	}

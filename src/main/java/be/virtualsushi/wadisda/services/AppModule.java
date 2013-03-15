@@ -1,6 +1,7 @@
 package be.virtualsushi.wadisda.services;
 
 import java.io.IOException;
+import java.security.Security;
 
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.SymbolConstants;
@@ -34,10 +35,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
+import be.virtualsushi.wadisda.services.gmail.OAuth2Provider;
 import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 import be.virtualsushi.wadisda.services.google.impl.GoogleApiClientSourceImpl;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
 import be.virtualsushi.wadisda.services.impl.CustomValidationDecorator;
+import be.virtualsushi.wadisda.services.impl.DateFormatServiceImpl;
+import be.virtualsushi.wadisda.services.impl.ExecutorServiceImpl;
+import be.virtualsushi.wadisda.services.messages.MessageEndpoint;
 import be.virtualsushi.wadisda.services.messages.MessageService;
 import be.virtualsushi.wadisda.services.messages.impl.EmailMessageEndpointImpl;
 import be.virtualsushi.wadisda.services.messages.impl.GoogleCalendarMessageEndpointImpl;
@@ -61,9 +66,11 @@ public class AppModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(MessageService.class, MessageServiceImpl.class);
 		binder.bind(GoogleApiClientSource.class, GoogleApiClientSourceImpl.class);
-		binder.bind(EmailMessageEndpointImpl.class).withId("emailMessageEndpoint");
-		binder.bind(GoogleCalendarMessageEndpointImpl.class).withId("googleCalendarMessageEndpoint");
-		binder.bind(GoogleTasksMessageEndpointImpl.class).withId("googleTasksMessageEndpoint");
+		binder.bind(MessageEndpoint.class, EmailMessageEndpointImpl.class).withId("emailMessageEndpoint");
+		binder.bind(MessageEndpoint.class, GoogleCalendarMessageEndpointImpl.class).withId("googleCalendarMessageEndpoint");
+		binder.bind(MessageEndpoint.class, GoogleTasksMessageEndpointImpl.class).withId("googleTasksMessageEndpoint");
+		binder.bind(ExecutorService.class, ExecutorServiceImpl.class);
+		binder.bind(DateFormatService.class, DateFormatServiceImpl.class);
 	}
 
 	@FactoryDefaults
@@ -96,6 +103,7 @@ public class AppModule {
 		// the first locale name is the default when there's no reasonable
 		// match).
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+		Security.addProvider(new OAuth2Provider());
 	}
 
 	@Contribute(SymbolSource.class)
@@ -203,5 +211,4 @@ public class AppModule {
 	public JsonFactory buildJsonFactory() {
 		return new JacksonFactory();
 	}
-
 }

@@ -34,7 +34,7 @@ public class ListJpaRepositoryImpl implements ListJpaRepository {
 		return query.getResultList();
 	}
 
-	private <T> TypedQuery<T> createBaseQuery(Class<T> entityClass) {
+	protected <T> TypedQuery<T> createBaseQuery(Class<T> entityClass) {
 		CriteriaQuery<T> query = entityManager.getCriteriaBuilder().createQuery(entityClass);
 		Root<T> root = query.from(entityClass);
 		query.select(root);

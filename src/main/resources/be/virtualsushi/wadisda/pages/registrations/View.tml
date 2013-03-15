@@ -1,8 +1,121 @@
 <!DOCTYPE html>
 <html t:type="layout" title="${message:title}"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
-      
-      
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	
+	<div class="row-fluid">
+		<div class="span12">
+			<t:if test="creator">
+				<t:pagelink page="registrations/edit" context="registration.id" class="btn btn-primary pull-right">${message:edit}</t:pagelink>
+			</t:if>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:date}:&nbsp;</div>
+		<div class="span2">${date}</div>
+		<div class="span1 field-label">${message:time}:&nbsp;</div>
+		<div class="span1">${time}</div>
+		<div class="span1 field-label">${message:duration}:&nbsp;</div>
+		<div class="span2">${registration.duration}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:conversationType-label}:&nbsp;</div>
+		<div class="span10">${registration.conversationType.name}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:question}:&nbsp;</div>
+		<div class="span10">${registration.question}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:gender}:&nbsp;</div>
+		<div class="span2">${registration.gender}</div>
+		<div class="span1 field-label">${message:age}:&nbsp;</div>
+		<div class="span2">${registration.age}</div>
+	</div>
+	
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:hasViolence}:&nbsp;</div>
+		<div class="span2">${registration.hasViolence}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:zipCode}:&nbsp;</div>
+		<div class="span2">
+			<t:if test="registration.location">
+				${registration.location.zipCode}
+			</t:if>
+		</div>
+		<div class="span1 field-label">${message:location}:&nbsp;</div>
+		<div class="span2">
+			<t:if test="registration.location">
+				${registration.location.name}
+			</t:if>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:presentation}:&nbsp;</div>
+		<div class="span2">
+			<t:if test="registration.presentation">
+				${registration.presentation.name}
+			</t:if>
+		</div>
+		<div class="span1 field-label">${message:relation}:&nbsp;</div>
+		<div class="span2">${registrationRelation}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:product}:&nbsp;</div>
+		<div class="span2">${registrationProduct}</div>
+		<div class="span1 field-label">${message:referer}:&nbsp;</div>
+		<div class="span2">${registrationReferer}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:productQuestion}:&nbsp;</div>
+		<div class="span2">${registrationProductQuestion}</div>
+	</div>
+	
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:socialContext}:&nbsp;</div>
+		<div class="span2">${registrationSocialContext}</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2 field-label">${message:questionType-label}:&nbsp;</div>
+		<div class="span2">
+			<t:if test="registration.questionType">
+				${registration.questionType.name}
+			</t:if>
+		</div>
+		<div class="span2 field-label">${message:origin}:&nbsp;</div>
+		<div class="span2">
+			<t:if test="registration.origin">
+				${registration.origin.name}
+			</t:if>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="bs-docs-example span9">
+			<h6>${message:third.party.person.title}</h6>
+			<hr />
+			<div class="row-fluid">
+				<div class="span1 field-label">${message:tpGender-label}:&nbsp;</div>
+				<div class="span1">${registration.tpGender}</div>
+				<div class="span1 field-label">${message:tpAge-label}:&nbsp;</div>
+				<div class="span1">${registration.tpAge}</div>
+				<div class="span2 field-label">${message:tpUsageType-label}:&nbsp;</div>
+				<div class="span2">
+					<t:if test="registration.tpUsageType">
+						${registration.tpUsageType.name}
+					</t:if>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </html>

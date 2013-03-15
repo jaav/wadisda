@@ -1,9 +1,9 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
-    <t:delegate to='block:nextPageBlock'/>
+    <t:delegate to="block:nextPageBlock"/>
 
-    <t:block t:id='nextPageBlock'>
-        <t:loop t:id='loop' t:source='nextPage' value='row'>
+    <t:block t:id="nextPageBlock">
+        <t:loop t:id="loop" t:source="nextPage" t:value="row">
             <t:body/>
         </t:loop>
     </t:block>

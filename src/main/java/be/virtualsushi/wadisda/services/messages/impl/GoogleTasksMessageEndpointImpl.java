@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.Messages;
 
 import be.virtualsushi.wadisda.entities.Registration;
@@ -25,18 +24,18 @@ public class GoogleTasksMessageEndpointImpl extends AbstractMessageEndpointImpl 
 	@Inject
 	private GoogleApiClientSource googleApiClientSource;
 
-	public GoogleTasksMessageEndpointImpl(Messages messages, LinkSource linkSource, AuthorizationCodeFlow authorizationCodeFlow) {
-		super(messages, linkSource, authorizationCodeFlow);
+	public GoogleTasksMessageEndpointImpl(Messages messages, AuthorizationCodeFlow authorizationCodeFlow) {
+		super(messages, authorizationCodeFlow);
 	}
 
 	@Override
-	public void send(Message message, Registration registration, User creator) throws IOException {
+	public void send(Message message, Registration registration) throws IOException {
 		Task googleTask = new Task();
 		googleTask.setTitle(message.getTitle());
 		googleTask.setDue(new DateTime(message.getDueDate()));
 		List<Task.Links> links = new ArrayList<Task.Links>();
 		Links link = new Links();
-		link.setLink(generateRegistrationLink(registration));
+		link.setLink(message.getRegistrationLink());
 		link.setDescription(message.getDescription());
 		links.add(link);
 		googleTask.setLinks(links);

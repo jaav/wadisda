@@ -40,7 +40,7 @@ import be.virtualsushi.wadisda.services.repository.SimpleJpaRepository;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
 @Import(library = { "edit-registration.js" })
-public class Edit {
+public class Edit extends RegistrationsPage {
 
 	@Inject
 	private ListJpaRepository listJpaRepository;

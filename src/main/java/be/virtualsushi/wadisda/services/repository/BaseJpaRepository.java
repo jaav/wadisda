@@ -14,6 +14,9 @@ public interface BaseJpaRepository<T extends BaseEntity> {
 	void save(T entity);
 
 	@CommitAfter
+	T merge(T entity);
+
+	@CommitAfter
 	void delete(T entity);
 
 	T findOne(Long id);

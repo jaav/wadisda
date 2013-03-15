@@ -18,6 +18,8 @@ public class Message {
 
 	private List<User> attendees;
 
+	private String registrationLink;
+
 	public String getTitle() {
 		return title;
 	}
@@ -65,8 +67,22 @@ public class Message {
 		attendees.add(attendee);
 	}
 
+	public void removeAttendee(User attendee) {
+		if (attendees != null) {
+			attendees.remove(attendee);
+		}
+	}
+
 	public boolean isUserAttended(User user) {
 		return attendees != null && attendees.contains(user);
+	}
+
+	public String getRegistrationLink() {
+		return registrationLink;
+	}
+
+	public void setRegistrationLink(String registrationLink) {
+		this.registrationLink = registrationLink;
 	}
 
 }

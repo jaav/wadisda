@@ -3,10 +3,14 @@ package be.virtualsushi.wadisda.pages;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.ValueEncoderSource;
 
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.User;
@@ -30,14 +34,23 @@ public class SendMessage {
 	@Inject
 	private AuthenticationManager authenticationManager;
 
-	@Property
-	private User user;
+	@Inject
+	private Messages messages;
 
+	@Inject
+	private ValueEncoderSource valueEncoderSource;
+
+	@Property
+	private User attendee;
+
+	@Persist
 	@Property
 	private Message message;
 
+	@Persist
 	private MessageTypes messageType;
 
+	@Persist
 	private Registration registration;
 
 	@SetupRender
@@ -48,7 +61,7 @@ public class SendMessage {
 	@OnEvent("nextPage")
 	public List<User> moreValues(int pageNumber) throws InterruptedException {
 		int first = pageNumber * PAGE_SIZE;
-		return userRepository.list(first, PAGE_SIZE);
+		return userRepository.listWithoutCurrent(authenticationManager.getCurrentUser(), first, PAGE_SIZE);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "messageForm")
@@ -73,8 +86,36 @@ public class SendMessage {
 		this.registration = registration;
 	}
 
-	public boolean isUserAttended(User user) {
-		return message.isUserAttended(user);
+	public boolean isUserAttended() {
+		return message.isUserAttended(attendee);
 	}
 
+	public void setUserAttended(boolean attended) {
+		if (attended) {
+			message.addAttendee(attendee);
+		}
+	}
+
+	public String getTitle() {
+		switch (messageType) {
+		case EMAIL:
+			return messages.get("title.send.email");
+		case EVENT:
+			return messages.get("title.add.calendar.event");
+		case TASK:
+			return messages.get("title.add.task");
+		}
+		return messages.get("title");
+	}
+
+	public String getListLabel() {
+		if (MessageTypes.EMAIL.equals(messageType)) {
+			return messages.get("list.label.recepients");
+		}
+		return messages.get("list.label.attendee");
+	}
+
+	public ValueEncoder<User> getAttendeeEncoder() {
+		return valueEncoderSource.getValueEncoder(User.class);
+	}
 }

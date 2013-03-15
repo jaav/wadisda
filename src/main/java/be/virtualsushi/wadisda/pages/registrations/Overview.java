@@ -13,7 +13,7 @@ import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.valueobjects.RegistrationTimePropertyConduit;
 import be.virtualsushi.wadisda.services.repository.RegistrationRepository;
 
-public class Overview {
+public class Overview extends RegistrationsPage {
 
 	@Inject
 	private RegistrationRepository registrationRepository;

@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.Messages;
 
 import be.virtualsushi.wadisda.entities.Registration;
@@ -26,18 +25,18 @@ public class GoogleCalendarMessageEndpointImpl extends AbstractMessageEndpointIm
 	@Inject
 	private GoogleApiClientSource googleClientSource;
 
-	public GoogleCalendarMessageEndpointImpl(Messages messages, LinkSource linkSource, AuthorizationCodeFlow authorizationCodeFlow) {
-		super(messages, linkSource, authorizationCodeFlow);
+	public GoogleCalendarMessageEndpointImpl(Messages messages, AuthorizationCodeFlow authorizationCodeFlow) {
+		super(messages, authorizationCodeFlow);
 	}
 
 	@Override
-	public void send(Message message, Registration registration, User creator) throws IOException {
-		Calendar client = googleClientSource.createCalendarClient(getCredential(creator));
+	public void send(Message message, Registration registration) throws IOException {
+		Calendar client = googleClientSource.createCalendarClient(getCredential(registration.getUser()));
 		Event event = new Event();
 		event.setStart(new EventDateTime().setDateTime(new DateTime(registration.getEpoch())));
 		event.setEnd(new EventDateTime().setDateTime(new DateTime(registration.getEpoch().getTime() + registration.getDuration())));
 		event.setSummary(message.getTitle());
-		event.setDescription(message.getDescription() + generateRegistrationLink(registration) + formatDueDate(message.getDueDate()));
+		event.setDescription(message.getDescription() + message.getRegistrationLink() + formatDueDate(message.getDueDate()));
 		List<EventAttendee> attendees = new ArrayList<EventAttendee>();
 		for (User user : message.getAttendees()) {
 			EventAttendee attendee = new EventAttendee();
@@ -46,6 +45,6 @@ public class GoogleCalendarMessageEndpointImpl extends AbstractMessageEndpointIm
 			attendees.add(attendee);
 		}
 		event.setAttendees(attendees);
-		client.events().insert(creator.getCalendar().getId(), event).execute();
+		client.events().insert(registration.getUser().getCalendar().getId(), event).execute();
 	}
 }

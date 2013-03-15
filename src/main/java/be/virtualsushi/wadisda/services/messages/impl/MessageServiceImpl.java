@@ -1,8 +1,6 @@
 package be.virtualsushi.wadisda.services.messages.impl;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.slf4j.Logger;
 
@@ -10,6 +8,7 @@ import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.entities.enums.MessageTypes;
 import be.virtualsushi.wadisda.entities.valueobjects.Message;
+import be.virtualsushi.wadisda.services.ExecutorService;
 import be.virtualsushi.wadisda.services.messages.MessageEndpoint;
 import be.virtualsushi.wadisda.services.messages.MessageService;
 
@@ -19,13 +18,11 @@ public class MessageServiceImpl implements MessageService {
 
 		private final MessageTypes type;
 		private final Message message;
-		private final User user;
 		private Registration registration;
 
-		public SendMessageRunnable(MessageTypes type, Message message, User creator, Registration registration) {
+		public SendMessageRunnable(MessageTypes type, Message message, Registration registration) {
 			this.type = type;
 			this.message = message;
-			this.user = creator;
 			this.registration = registration;
 		}
 
@@ -34,13 +31,13 @@ public class MessageServiceImpl implements MessageService {
 			try {
 				switch (type) {
 				case EMAIL:
-					emailMessageEndpoint.send(message, registration, user);
+					emailMessageEndpoint.send(message, registration);
 					break;
 				case EVENT:
-					googleCalendarMessageEndpoint.send(message, registration, user);
+					googleCalendarMessageEndpoint.send(message, registration);
 					break;
 				case TASK:
-					googleTasksMessageEndpoint.send(message, registration, user);
+					googleTasksMessageEndpoint.send(message, registration);
 					break;
 				}
 			} catch (Exception e) {
@@ -61,16 +58,16 @@ public class MessageServiceImpl implements MessageService {
 	@InjectService("googleTasksMessageEndpoint")
 	private MessageEndpoint googleTasksMessageEndpoint;
 
-	private Executor executor;
+	@Inject
+	private ExecutorService executorService;
 
 	public MessageServiceImpl(Logger logger) {
 		this.logger = logger;
-		executor = Executors.newFixedThreadPool(10);
 	}
 
 	@Override
 	public void sendMessage(MessageTypes type, Message message, User creator, Registration registration) {
-		executor.execute(new SendMessageRunnable(type, message, creator, registration));
+		executorService.execute(new SendMessageRunnable(type, message, registration));
 	}
 
 }

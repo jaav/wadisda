@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.apache.tapestry5.jpa.annotations.CommitAfter;
+
 import be.virtualsushi.wadisda.entities.BaseEntity;
 import be.virtualsushi.wadisda.services.repository.BaseJpaRepository;
 
@@ -26,6 +28,12 @@ public abstract class AbstractJpaRepositoryImpl<T extends BaseEntity> extends Li
 	@Override
 	public void save(T entity) {
 		getEntityManager().persist(entity);
+	}
+
+	@Override
+	@CommitAfter
+	public T merge(T entity) {
+		return getEntityManager().merge(entity);
 	}
 
 	@Override
