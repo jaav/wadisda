@@ -11,6 +11,7 @@
 			<div class="hero-unit span8" style="margin:50px 20px;">
 				<h1>${message:info.header}</h1>
 				<p>${message:info.text}</p>
+				<t:actionlink t:id="refresh" class="btn btn-primary" >${message:refresh}</t:actionlink>
 			</div>
 		</div>
 	</body>

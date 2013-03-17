@@ -18,4 +18,6 @@ public interface AuthenticationManager {
 
 	void logout();
 
+	boolean isAuthenticated();
+
 }

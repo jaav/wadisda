@@ -1,7 +1,6 @@
 package be.virtualsushi.wadisda.services;
 
 import java.io.IOException;
-import java.security.Security;
 
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.SymbolConstants;
@@ -35,7 +34,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.valueobjects.TimeValue;
-import be.virtualsushi.wadisda.services.gmail.OAuth2Provider;
 import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 import be.virtualsushi.wadisda.services.google.impl.GoogleApiClientSourceImpl;
 import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvider;
@@ -103,7 +101,6 @@ public class AppModule {
 		// the first locale name is the default when there's no reasonable
 		// match).
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-		Security.addProvider(new OAuth2Provider());
 	}
 
 	@Contribute(SymbolSource.class)

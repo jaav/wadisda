@@ -1,6 +1,7 @@
 package be.virtualsushi.wadisda.services.messages.impl;
 
 import java.io.IOException;
+import java.security.Security;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -10,6 +11,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import be.virtualsushi.wadisda.services.gmail.OAuth2Provider;
 import be.virtualsushi.wadisda.services.gmail.OAuth2SaslClientFactory;
 
 public class EmailSender {
@@ -17,6 +19,7 @@ public class EmailSender {
 	private Session session;
 
 	public EmailSender(String accessToken) {
+		Security.addProvider(new OAuth2Provider());
 		Properties props = new Properties();
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.starttls.required", "true");

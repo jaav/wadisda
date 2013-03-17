@@ -8,6 +8,7 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ValueEncoderSource;
@@ -40,6 +41,9 @@ public class SendMessage {
 	@Inject
 	private ValueEncoderSource valueEncoderSource;
 
+	@Inject
+	private LinkSource linkSource;
+
 	@Property
 	private User attendee;
 
@@ -66,6 +70,7 @@ public class SendMessage {
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "messageForm")
 	public Object onSubmitMessageSend() {
+		message.setRegistrationLink(linkSource.createPageRenderLink("registrations/view", false, registration.getId()).toAbsoluteURI());
 		messageService.sendMessage(messageType, message, authenticationManager.getCurrentUser(), registration);
 		return Overview.class;
 	}

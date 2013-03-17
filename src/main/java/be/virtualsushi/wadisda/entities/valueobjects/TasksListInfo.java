@@ -1,10 +1,14 @@
 package be.virtualsushi.wadisda.entities.valueobjects;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class TasksListInfo {
+public class TasksListInfo implements Serializable {
+
+	private static final long serialVersionUID = 7563313430849412452L;
 
 	@Column(name = "tasks_list_title")
 	private String title;

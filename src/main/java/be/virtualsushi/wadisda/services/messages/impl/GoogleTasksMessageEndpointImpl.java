@@ -40,6 +40,7 @@ public class GoogleTasksMessageEndpointImpl extends AbstractMessageEndpointImpl 
 		links.add(link);
 		googleTask.setLinks(links);
 		googleTask.setStatus("needsAction");
+		googleTask.setNotes(message.getDescription());
 
 		for (User user : message.getAttendees()) {
 			Tasks client = googleApiClientSource.createTasksClient(getCredential(user));

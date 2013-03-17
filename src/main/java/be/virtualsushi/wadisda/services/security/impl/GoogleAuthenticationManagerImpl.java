@@ -87,4 +87,9 @@ public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 	public void updateCurrentUserInfo(User user) {
 		((GoogleAccount) SecurityUtils.getSubject().getPrincipal()).updateUser(user);
 	}
+
+	@Override
+	public boolean isAuthenticated() {
+		return SecurityUtils.getSubject().isAuthenticated();
+	}
 }
