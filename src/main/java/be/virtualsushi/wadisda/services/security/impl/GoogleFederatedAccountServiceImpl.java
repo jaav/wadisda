@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAccount;
@@ -88,7 +89,11 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			user = new User();
 			user.setEmail(userInfo.getEmail());
 			user.setName(userInfo.getName());
-			user.setAvatarUrl(userInfo.getPicture());
+			if (StringUtils.isNotBlank(userInfo.getPicture())) {
+				user.setAvatarUrl(userInfo.getPicture());
+			} else {
+				user.setAvatarUrl("/layout/images/avatar.png");
+			}
 			user.addRole(Roles.USER);
 			user.setActive(false);
 			executorService.execute(new GetGoogleDefaultsRunnable(userInfo.getEmail(), (Credential) authenticationToken.getCredentials()));
