@@ -15,6 +15,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.slf4j.Logger;
 
+import be.virtualsushi.wadisda.services.GoogleApiRequestExecutor;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 
 import com.google.api.client.http.HttpTransport;
@@ -40,6 +41,9 @@ public class Index {
 
 	@Inject
 	private AuthenticationManager authenticationManager;
+
+	@Inject
+	private GoogleApiRequestExecutor googleApiRequestExecutor;
 
 	@Inject
 	private Logger logger;
@@ -68,7 +72,7 @@ public class Index {
 
 		Calendar client = new Calendar.Builder(httpTransport, jsonFactory, authenticationManager.getCurrentUserCredential()).build();
 		try {
-			Events eventsList = client.events().list(authenticationManager.getCurrentUser().getEmail()).execute();
+			Events eventsList = googleApiRequestExecutor.execute(client.events().list(authenticationManager.getCurrentUser().getCalendar().getId()));
 			events = new ArrayList<Event>();
 			for (Event event : eventsList.getItems()) {
 				if (EVENT_CONFIRMED_STATUS.equals(event.getStatus())) {
@@ -103,7 +107,7 @@ public class Index {
 	public void onTasksListLoad() {
 		Tasks client = new Tasks.Builder(httpTransport, jsonFactory, authenticationManager.getCurrentUserCredential()).build();
 		try {
-			List<Task> tasksList = client.tasks().list("@default").execute().getItems();
+			List<Task> tasksList = googleApiRequestExecutor.execute(client.tasks().list(authenticationManager.getCurrentUser().getTasksList().getId())).getItems();
 			if (tasksList.size() > 10) {
 				tasks = tasksList.subList(0, 9);
 			} else {

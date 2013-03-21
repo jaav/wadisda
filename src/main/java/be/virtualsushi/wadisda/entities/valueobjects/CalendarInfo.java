@@ -16,6 +16,15 @@ public class CalendarInfo implements Serializable {
 	@Column(name = "calendar_id")
 	private String id;
 
+	public CalendarInfo() {
+
+	}
+
+	public CalendarInfo(String id, String summary) {
+		this.id = id;
+		this.summary = summary;
+	}
+
 	public String getSummary() {
 		return summary;
 	}

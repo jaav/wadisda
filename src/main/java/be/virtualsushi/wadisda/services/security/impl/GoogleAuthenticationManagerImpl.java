@@ -11,6 +11,7 @@ import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
 
 import be.virtualsushi.wadisda.entities.User;
+import be.virtualsushi.wadisda.services.GoogleApiRequestExecutor;
 import be.virtualsushi.wadisda.services.security.AuthenticationManager;
 import be.virtualsushi.wadisda.services.security.GoogleAccount;
 import be.virtualsushi.wadisda.services.security.GoogleAuthenticationToken;
@@ -29,6 +30,9 @@ public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 
 	@Inject
 	private LinkSource linkSource;
+
+	@Inject
+	private GoogleApiRequestExecutor googleApiRequestExecutor;
 
 	private Logger logger;
 
@@ -55,7 +59,7 @@ public class GoogleAuthenticationManagerImpl implements AuthenticationManager {
 	@Override
 	public void authorize(String userId) {
 		try {
-			TokenResponse token = authorizationCodeFlow.newTokenRequest(userId).setRedirectUri(redirectUrl).setGrantType("authorization_code").execute();
+			TokenResponse token = googleApiRequestExecutor.execute(authorizationCodeFlow.newTokenRequest(userId).setRedirectUri(redirectUrl).setGrantType("authorization_code"));
 			Credential credential = authorizationCodeFlow.createAndStoreCredential(token, userId);
 			SecurityUtils.getSubject().login(new GoogleAuthenticationToken(userId, credential));
 		} catch (IOException e) {

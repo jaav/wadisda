@@ -40,6 +40,7 @@ import be.virtualsushi.wadisda.services.impl.ClasspathPropertiesFileSymbolProvid
 import be.virtualsushi.wadisda.services.impl.CustomValidationDecorator;
 import be.virtualsushi.wadisda.services.impl.DateFormatServiceImpl;
 import be.virtualsushi.wadisda.services.impl.ExecutorServiceImpl;
+import be.virtualsushi.wadisda.services.impl.GoogleApiRequestExecutorImpl;
 import be.virtualsushi.wadisda.services.messages.MessageEndpoint;
 import be.virtualsushi.wadisda.services.messages.MessageService;
 import be.virtualsushi.wadisda.services.messages.impl.EmailMessageEndpointImpl;
@@ -69,6 +70,7 @@ public class AppModule {
 		binder.bind(MessageEndpoint.class, GoogleTasksMessageEndpointImpl.class).withId("googleTasksMessageEndpoint");
 		binder.bind(ExecutorService.class, ExecutorServiceImpl.class);
 		binder.bind(DateFormatService.class, DateFormatServiceImpl.class);
+		binder.bind(GoogleApiRequestExecutor.class, GoogleApiRequestExecutorImpl.class);
 	}
 
 	@FactoryDefaults

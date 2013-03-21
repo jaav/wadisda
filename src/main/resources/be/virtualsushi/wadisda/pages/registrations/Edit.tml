@@ -119,11 +119,11 @@
 		
 		<div t:type="zone" t:id="productZone" id="productZone">
 			<div id="productDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="productDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
-				<div class="modal-header">
-					<h3 id="productDialogLabel">${message:new.product}</h3>
-				</div>
-				<div class="modal-body">
-					<t:form t:id="productForm" class="form-horizontal" t:zone="topZone" t:validate="product">
+				<t:form t:id="productForm" class="form-horizontal" style="margin: 0px;" t:zone="topZone" t:validate="product">
+					<div class="modal-header">
+						<h3 id="productDialogLabel">${message:new.product}</h3>
+					</div>
+					<div class="modal-body">
 						<div class="control-group">
 							<label t:type="label" class="control-label" for="productName" />
 							<t:textfield t:id="productName" value="product.name" class="span8"/>
@@ -132,102 +132,92 @@
 							<label t:type="label" class="control-label" for="productDescription" />
 							<t:textarea t:id="productDescription" value="product.description" class="span8"/>
 						</div>
-						<div class="form-actions">
-							<div class="btn-toolbar pull-right">
-								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
-								<button type="submit" class="btn btn-primary">${message:save}</button>
-							</div>
-						</div>			
-					</t:form>
-				</div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+						<button type="submit" class="btn btn-primary">${message:save}</button>
+					</div>
+				</t:form>
 			</div>
 		</div>
 		
 		<div t:type="zone" t:id="productQuestionZone" id="productQuestionZone">
 			<div id="productQuestionDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="productQuestionDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
-				<div class="modal-header">
-					<h3 id="productQuestionDialogLabel">${message:new.productQuestion}</h3>
-				</div>
-				<div class="modal-body">
-					<t:form t:id="productQuestionForm" class="form-horizontal" t:zone="topZone" t:validate="productQuestion">
+				<t:form t:id="productQuestionForm" class="form-horizontal" style="margin: 0px;" t:zone="topZone" t:validate="productQuestion">
+					<div class="modal-header">
+						<h3 id="productQuestionDialogLabel">${message:new.productQuestion}</h3>
+					</div>
+					<div class="modal-body">
 						<div class="control-group">
 							<label t:type="label" class="control-label" for="productQuestionName"/>
 							<t:textarea t:id="productQuestionName" value="productQuestion.question" class="span8"/>
 						</div>
-						<div class="form-actions">
-							<div class="btn-toolbar pull-right">
-								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
-								<button type="submit" class="btn btn-primary">${message:save}</button>
-							</div>
-						</div>			
-					</t:form>
-				</div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+						<button type="submit" class="btn btn-primary">${message:save}</button>
+					</div>			
+				</t:form>
 			</div>
 		</div>
 		
 		<div t:type="zone" t:id="relationZone" id="relationZone">
 			<div id="relationDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="relationDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
-				<div class="modal-header">
-					<h3 id="relationDialogLabel">${message:new.relation}</h3>
-				</div>
-				<div class="modal-body">
-					<t:form t:id="relationForm" class="form-horizontal" t:zone="topZone" t:validate="relation">
+				<t:form t:id="relationForm" class="form-horizontal" style="margin: 0px;" t:zone="topZone" t:validate="relation">
+					<div class="modal-header">
+						<h3 id="relationDialogLabel">${message:new.relation}</h3>
+					</div>
+					<div class="modal-body">
 						<div class="control-group">
 							<label t:type="label" class="control-label" for="relationName" >${message:productName-label}</label>
 							<t:textfield t:id="relationName" value="relation.name" class="span8"/>
 						</div>
-						<div class="form-actions">
-							<div class="btn-toolbar pull-right">
-								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
-								<button type="submit" class="btn btn-primary">${message:save}</button>
-							</div>
-						</div>			
-					</t:form>
-				</div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+						<button type="submit" class="btn btn-primary">${message:save}</button>
+					</div>			
+				</t:form>
 			</div>
 		</div>
 		
 		<div t:type="zone" t:id="refererZone" id="refererZone">
 			<div id="refererDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="refererDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
-				<div class="modal-header">
-					<h3 id="refererDialogLabel">${message:new.referer}</h3>
-				</div>
-				<div class="modal-body">
-					<t:form t:id="refererForm" class="form-horizontal" t:zone="topZone" t:validate="referer">
+				<t:form t:id="refererForm" class="form-horizontal" style="margin: 0px;" t:zone="topZone" t:validate="referer">
+					<div class="modal-header">
+						<h3 id="refererDialogLabel">${message:new.referer}</h3>
+					</div>
+					<div class="modal-body">
 						<div class="control-group">
 							<label t:type="label" class="control-label" for="refererName" >${message:productName-label}</label>
 							<t:textfield t:id="refererName" value="referer.name" class="span8"/>
 						</div>
-						<div class="form-actions">
-							<div class="btn-toolbar pull-right">
-								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
-								<button type="submit" class="btn btn-primary">${message:save}</button>
-							</div>
-						</div>			
-					</t:form>
-				</div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+						<button type="submit" class="btn btn-primary">${message:save}</button>
+					</div>			
+				</t:form>
 			</div>
 		</div>
 		
 		<div t:type="zone" t:id="socialContextZone" id="socialContextZone">
 			<div id="socialContextDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="socialContextDialogLabel" aria-hidden="true" update="show" data-backdrop="static">
-				<div class="modal-header">
-					<h3 id="socialContextDialogLabel">${message:new.socialContext}</h3>
-				</div>
-				<div class="modal-body">
-					<t:form t:id="socialContextForm" class="form-horizontal" t:zone="topZone" t:validate="socialContext">
+				<t:form t:id="socialContextForm" class="form-horizontal" style="margin: 0px;" t:zone="topZone" t:validate="socialContext">
+					<div class="modal-header">
+						<h3 id="socialContextDialogLabel">${message:new.socialContext}</h3>
+					</div>
+					<div class="modal-body">
 						<div class="control-group">
 							<label t:type="label" class="control-label" for="socialContextName" >${message:productName-label}</label>
 							<t:textfield t:id="socialContextName" value="socialContext.name" class="span8"/>
 						</div>
-						<div class="form-actions">
-							<div class="btn-toolbar pull-right">
-								<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
-								<button type="submit" class="btn btn-primary">${message:save}</button>
-							</div>
-						</div>			
-					</t:form>
-				</div>
+					</div>
+					<div class="modal-footer">
+						<a class="btn"  data-dismiss="modal" aria-hidden="true">${message:cancel}</a>
+						<button type="submit" class="btn btn-primary">${message:save}</button>
+					</div>
+				</t:form>
 			</div>
 		</div>
 

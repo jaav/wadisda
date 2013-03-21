@@ -9,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAccount;
 import org.slf4j.Logger;
+import org.tynamo.security.federatedaccounts.FederatedAccount.FederatedAccountType;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 
 import be.virtualsushi.wadisda.entities.User;
@@ -16,6 +17,7 @@ import be.virtualsushi.wadisda.entities.enums.Roles;
 import be.virtualsushi.wadisda.entities.valueobjects.CalendarInfo;
 import be.virtualsushi.wadisda.entities.valueobjects.TasksListInfo;
 import be.virtualsushi.wadisda.services.ExecutorService;
+import be.virtualsushi.wadisda.services.GoogleApiRequestExecutor;
 import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 import be.virtualsushi.wadisda.services.repository.UserRepository;
 import be.virtualsushi.wadisda.services.security.GoogleAccount;
@@ -43,22 +45,16 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 		public void run() {
 			try {
 				Calendar calendarClient = googleApiClientSource.createCalendarClient(credential);
-				CalendarListEntry calendarEntry = calendarClient.calendarList().get(email).execute();
-				CalendarInfo calendarInfo = new CalendarInfo();
-				if (calendarEntry != null) {
-					calendarInfo.setId(calendarEntry.getId());
-					calendarInfo.setSummary(calendarEntry.getSummary());
-				}
+				CalendarListEntry calendarEntry = googleApiRequestExecutor.execute(calendarClient.calendarList().get(email));
 				Tasks tasksClient = googleApiClientSource.createTasksClient(credential);
-				TaskList taskList = tasksClient.tasklists().get("@default").execute();
-				TasksListInfo tasksListInfo = new TasksListInfo();
-				if (taskList != null) {
-					tasksListInfo.setId(taskList.getId());
-					tasksListInfo.setTitle(taskList.getTitle());
-				}
+				TaskList taskList = googleApiRequestExecutor.execute(tasksClient.tasklists().get("@default"));
 				User user = userRepository.findByEmail(email);
-				user.setCalendar(calendarInfo);
-				user.setTasksList(tasksListInfo);
+				if (calendarEntry != null) {
+					user.setCalendar(new CalendarInfo(calendarEntry.getId(), calendarEntry.getSummary()));
+				}
+				if (taskList != null) {
+					user.setTasksList(new TasksListInfo(taskList.getId(), taskList.getTitle()));
+				}
 				userRepository.save(user);
 			} catch (IOException e) {
 				logger.error("Error getting Google services defaults (Calendar and Tasks list) for user: " + email, e);
@@ -75,6 +71,9 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 	@Inject
 	private GoogleApiClientSource googleApiClientSource;
 
+	@Inject
+	private GoogleApiRequestExecutor googleApiRequestExecutor;
+
 	private Logger logger;
 
 	public GoogleFederatedAccountServiceImpl(Logger logger) {
@@ -83,7 +82,20 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 
 	@Override
 	public AuthenticationInfo federate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken, Object remoteAccount) {
-		Userinfo userInfo = (Userinfo) remoteAccount;
+		if (FederatedAccountType.google.name().equals(realmName)) {
+			return doLoginFederate(realmName, remotePrincipal, authenticationToken, remoteAccount);
+		}
+		return doRemmberMeFederate(realmName, remotePrincipal, authenticationToken);
+	}
+
+	private AuthenticationInfo doRemmberMeFederate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken) {
+		GoogleAccount account = (GoogleAccount) remotePrincipal;
+		User user = userRepository.findByEmail(account.getUser().getEmail());
+		return new SimpleAccount(new GoogleAccount(user, user.getGoogleUserId()), authenticationToken, realmName);
+	}
+
+	private AuthenticationInfo doLoginFederate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken, Object remoteAccount) {
+		Userinfo userInfo = (Userinfo) remotePrincipal;
 		User user = userRepository.findByEmail(userInfo.getEmail());
 		if (user == null) {
 			user = new User();
@@ -96,10 +108,12 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			}
 			user.addRole(Roles.USER);
 			user.setActive(false);
+			user.setCalendar(new CalendarInfo(user.getEmail(), ""));
+			user.setTasksList(new TasksListInfo("@default", ""));
 			executorService.execute(new GetGoogleDefaultsRunnable(userInfo.getEmail(), (Credential) authenticationToken.getCredentials()));
 		}
-		user.setGoogleUserId((String) remotePrincipal);
+		user.setGoogleUserId((String) remoteAccount);
 		userRepository.save(user);
-		return new SimpleAccount(new GoogleAccount(user, (String) remotePrincipal), authenticationToken.getCredentials(), realmName);
+		return new SimpleAccount(new GoogleAccount(user, (String) remoteAccount), authenticationToken.getCredentials(), realmName);
 	}
 }

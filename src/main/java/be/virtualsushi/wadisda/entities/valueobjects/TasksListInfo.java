@@ -16,6 +16,15 @@ public class TasksListInfo implements Serializable {
 	@Column(name = "tasks_list_id")
 	private String id;
 
+	public TasksListInfo() {
+
+	}
+
+	public TasksListInfo(String id, String title) {
+		this.id = id;
+		this.title = title;
+	}
+
 	public String getId() {
 		return id;
 	}

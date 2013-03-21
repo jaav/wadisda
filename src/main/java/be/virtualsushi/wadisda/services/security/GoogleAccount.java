@@ -28,4 +28,9 @@ public class GoogleAccount implements Serializable {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return user.getEmail() + ":" + googleUserId;
+	}
+
 }
