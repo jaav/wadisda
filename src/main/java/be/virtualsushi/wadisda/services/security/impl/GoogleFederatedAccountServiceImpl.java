@@ -31,6 +31,8 @@ import com.google.api.services.tasks.model.TaskList;
 
 public class GoogleFederatedAccountServiceImpl implements FederatedAccountService {
 
+	private static final String DEFAULT_AVATAR_URL = "/layout/images/avatar.png";
+
 	private class GetGoogleDefaultsRunnable implements Runnable {
 
 		private String email;
@@ -82,19 +84,21 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 
 	@Override
 	public AuthenticationInfo federate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken, Object remoteAccount) {
+		User user = null;
 		if (FederatedAccountType.google.name().equals(realmName)) {
-			return doLoginFederate(realmName, remotePrincipal, authenticationToken, remoteAccount);
+			user = doLoginFederate(remotePrincipal, (Credential) authenticationToken.getCredentials(), (String) remoteAccount);
+		} else {
+			user = doRemmberMeFederate(remotePrincipal);
 		}
-		return doRemmberMeFederate(realmName, remotePrincipal, authenticationToken);
+		return new SimpleAccount(new GoogleAccount(user, user.getGoogleUserId()), authenticationToken.getCredentials(), realmName);
 	}
 
-	private AuthenticationInfo doRemmberMeFederate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken) {
+	private User doRemmberMeFederate(Object remotePrincipal) {
 		GoogleAccount account = (GoogleAccount) remotePrincipal;
-		User user = userRepository.findByEmail(account.getUser().getEmail());
-		return new SimpleAccount(new GoogleAccount(user, user.getGoogleUserId()), authenticationToken, realmName);
+		return userRepository.findByEmail(account.getUser().getEmail());
 	}
 
-	private AuthenticationInfo doLoginFederate(String realmName, Object remotePrincipal, AuthenticationToken authenticationToken, Object remoteAccount) {
+	private User doLoginFederate(Object remotePrincipal, Credential credential, String remoteUserId) {
 		Userinfo userInfo = (Userinfo) remotePrincipal;
 		User user = userRepository.findByEmail(userInfo.getEmail());
 		if (user == null) {
@@ -104,16 +108,20 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			if (StringUtils.isNotBlank(userInfo.getPicture())) {
 				user.setAvatarUrl(userInfo.getPicture());
 			} else {
-				user.setAvatarUrl("/layout/images/avatar.png");
+				user.setAvatarUrl(DEFAULT_AVATAR_URL);
 			}
 			user.addRole(Roles.USER);
 			user.setActive(false);
 			user.setCalendar(new CalendarInfo(user.getEmail(), ""));
 			user.setTasksList(new TasksListInfo("@default", ""));
-			executorService.execute(new GetGoogleDefaultsRunnable(userInfo.getEmail(), (Credential) authenticationToken.getCredentials()));
+			executorService.execute(new GetGoogleDefaultsRunnable(userInfo.getEmail(), credential));
+		} else {
+			if (StringUtils.isNotBlank(userInfo.getPicture()) && DEFAULT_AVATAR_URL.equals(user.getAvatarUrl())) {
+				user.setAvatarUrl(userInfo.getPicture());
+			}
 		}
-		user.setGoogleUserId((String) remoteAccount);
+		user.setGoogleUserId(remoteUserId);
 		userRepository.save(user);
-		return new SimpleAccount(new GoogleAccount(user, (String) remoteAccount), authenticationToken.getCredentials(), realmName);
+		return user;
 	}
 }
