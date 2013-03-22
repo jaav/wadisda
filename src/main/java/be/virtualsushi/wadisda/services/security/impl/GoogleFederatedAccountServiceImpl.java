@@ -105,11 +105,7 @@ public class GoogleFederatedAccountServiceImpl implements FederatedAccountServic
 			user = new User();
 			user.setEmail(userInfo.getEmail());
 			user.setName(userInfo.getName());
-			if (StringUtils.isNotBlank(userInfo.getPicture())) {
-				user.setAvatarUrl(userInfo.getPicture());
-			} else {
-				user.setAvatarUrl(DEFAULT_AVATAR_URL);
-			}
+			user.setAvatarUrl(StringUtils.isNotBlank(userInfo.getPicture()) ? userInfo.getPicture() : DEFAULT_AVATAR_URL);
 			user.addRole(Roles.USER);
 			user.setActive(false);
 			user.setCalendar(new CalendarInfo(user.getEmail(), ""));
