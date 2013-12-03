@@ -17,7 +17,6 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.beanvalidator.BeanValidatorSource;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
@@ -62,9 +61,6 @@ public class Edit extends RegistrationsPage {
 
 	@Inject
 	private AuthenticationManager authenticationManager;
-
-	@Inject
-	private BeanValidatorSource beanValidatorSource;
 
 	@Environmental
 	private JavaScriptSupport javaScriptSupport;

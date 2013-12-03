@@ -15,7 +15,6 @@ import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import be.virtualsushi.wadisda.services.GoogleApiRequestExecutor;
 import be.virtualsushi.wadisda.services.security.GoogleAuthenticationToken;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -23,9 +22,6 @@ import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfo;
 
 public class GoogleRealm extends AuthenticatingRealm {
-
-	@Inject
-	private AuthorizationCodeFlow authorizationCodeFlow;
 
 	@Inject
 	private HttpTransport httpTransport;

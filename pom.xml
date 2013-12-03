@@ -1,16 +1,16 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.virtualsushi.wadisda</groupId>
 	<artifactId>wadisda</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>wadisda Tapestry 5 Application</name>
+	<name>wadisda REST application</name>
 
 	<properties>
 		<tapestry-release-version>5.3.6</tapestry-release-version>
-		<servlet-api-release-version>2.5</servlet-api-release-version>
 		<testng-release-version>5.14.10</testng-release-version>
 		<easymock-release-version>3.0</easymock-release-version>
 	</properties>
@@ -74,8 +74,8 @@
 			application code. -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>${servlet-api-release-version}</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -185,6 +185,24 @@
 			<version>1.4.7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.podio</groupId>
+			<artifactId>api</artifactId>
+			<version>0.7.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-rest-webmvc</artifactId>
+			<version>2.0.0.M1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>1.5.0.M1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -205,7 +223,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -217,24 +235,21 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.7.2</version>
-				<configuration>
-					<systemPropertyVariables>
-						<tapestry.execution-mode>Qa</tapestry.execution-mode>
-					</systemPropertyVariables>
-				</configuration>
 			</plugin>
 
 			<!-- Run the application using "mvn jetty:run" -->
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
+				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.1.0.RC2</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
-					<systemProperties>
-						<systemProperty>
-							<name>tapestry.execution-mode</name>
-							<value>Development</value>
-						</systemProperty>
-					</systemProperties>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -249,6 +264,8 @@
 				<db.password>root</db.password>
 				<google.clientId>1062672960315.apps.googleusercontent.com</google.clientId>
 				<google.clientSecret>T6Ai0XdXzkNRSG4UvM0uAzRj</google.clientSecret>
+				<podio.api.secret>AMMqNQzdonNJ2PwiDbnmg94lfbWPwtzaaHwXwaWF1muar3Nm24FXJRxDwW6yqGIj</podio.api.secret>
+				<podio.api.client.id>wadisda</podio.api.client.id>
 				<host.name>localhost</host.name>
 				<host.port>8080</host.port>
 			</properties>
@@ -261,6 +278,8 @@
 				<db.password></db.password>
 				<google.clientId>97608153387.apps.googleusercontent.com</google.clientId>
 				<google.clientSecret>ol0QeK5hu22WOPvxpuIljr-3</google.clientSecret>
+				<podio.api.secret>AMMqNQzdonNJ2PwiDbnmg94lfbWPwtzaaHwXwaWF1muar3Nm24FXJRxDwW6yqGIj</podio.api.secret>
+				<podio.api.client.id>wadisda</podio.api.client.id>
 				<host.name>www.fivegeese.com</host.name>
 				<host.port>80</host.port>
 			</properties>
@@ -273,6 +292,8 @@
 				<db.password>administrator</db.password>
 				<google.clientId>97608153387.apps.googleusercontent.com</google.clientId>
 				<google.clientSecret>ol0QeK5hu22WOPvxpuIljr-3</google.clientSecret>
+				<podio.api.secret>AMMqNQzdonNJ2PwiDbnmg94lfbWPwtzaaHwXwaWF1muar3Nm24FXJRxDwW6yqGIj</podio.api.secret>
+				<podio.api.client.id>wadisda</podio.api.client.id>
 				<host.name>www.fivegeese.com</host.name>
 				<host.port>80</host.port>
 			</properties>
@@ -306,6 +327,22 @@
 		<repository>
 			<id>google-api-services</id>
 			<url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
+		</repository>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>http://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>http://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 

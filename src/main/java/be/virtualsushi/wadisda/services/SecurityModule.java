@@ -61,6 +61,7 @@ public class SecurityModule {
 	public static void setupSecurity(Configuration<SecurityFilterChain> configuration, SecurityFilterChainFactory factory) {
 		configuration.add(factory.createChain("/assets/**").add(factory.anon()).build());
 		configuration.add(factory.createChain("/login*/**").add(factory.anon()).build());
+		configuration.add(factory.createChain("/api/**").add(factory.anon()).build());
 		configuration.add(factory.createChain("/oauth2callback").add(factory.anon()).build());
 		configuration.add(factory.createChain("/**").add(factory.authc()).build());
 	}
