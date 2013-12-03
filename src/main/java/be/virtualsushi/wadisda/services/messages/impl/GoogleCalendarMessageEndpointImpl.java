@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.apache.tapestry5.ioc.Messages;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.User;
@@ -22,11 +20,11 @@ import com.google.api.services.calendar.model.EventDateTime;
 
 public class GoogleCalendarMessageEndpointImpl extends AbstractMessageEndpointImpl {
 
-	@Inject
+	@Autowired
 	private GoogleApiClientSource googleClientSource;
 
-	public GoogleCalendarMessageEndpointImpl(Messages messages, AuthorizationCodeFlow authorizationCodeFlow) {
-		super(messages, authorizationCodeFlow);
+	public GoogleCalendarMessageEndpointImpl(AuthorizationCodeFlow authorizationCodeFlow) {
+		super(authorizationCodeFlow);
 	}
 
 	@Override
@@ -36,7 +34,7 @@ public class GoogleCalendarMessageEndpointImpl extends AbstractMessageEndpointIm
 		event.setStart(new EventDateTime().setDateTime(new DateTime(registration.getEpoch())));
 		event.setEnd(new EventDateTime().setDateTime(new DateTime(registration.getEpoch().getTime() + registration.getDuration())));
 		event.setSummary(message.getTitle());
-		event.setDescription(message.getDescription() + message.getRegistrationLink() + formatDueDate(message.getDueDate()));
+		event.setDescription(message.getDescription() + message.getRegistrationLink() + message.getDueDate());
 		List<EventAttendee> attendees = new ArrayList<EventAttendee>();
 		for (User user : message.getAttendees()) {
 			EventAttendee attendee = new EventAttendee();

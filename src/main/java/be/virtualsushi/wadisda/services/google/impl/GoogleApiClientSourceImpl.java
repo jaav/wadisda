@@ -1,6 +1,6 @@
 package be.virtualsushi.wadisda.services.google.impl;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import be.virtualsushi.wadisda.services.google.GoogleApiClientSource;
 
@@ -12,10 +12,10 @@ import com.google.api.services.tasks.Tasks;
 
 public class GoogleApiClientSourceImpl implements GoogleApiClientSource {
 
-	@Inject
+	@Autowired
 	private HttpTransport httpTransport;
 
-	@Inject
+	@Autowired
 	private JsonFactory jsonFactory;
 
 	@Override

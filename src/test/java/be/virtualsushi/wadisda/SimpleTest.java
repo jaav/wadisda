@@ -1,6 +1,6 @@
 package be.virtualsushi.wadisda;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 public class SimpleTest {
 

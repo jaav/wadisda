@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.apache.tapestry5.ioc.Messages;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.User;
@@ -21,11 +19,11 @@ import com.google.api.services.tasks.model.Task.Links;
 
 public class GoogleTasksMessageEndpointImpl extends AbstractMessageEndpointImpl {
 
-	@Inject
+	@Autowired
 	private GoogleApiClientSource googleApiClientSource;
 
-	public GoogleTasksMessageEndpointImpl(Messages messages, AuthorizationCodeFlow authorizationCodeFlow) {
-		super(messages, authorizationCodeFlow);
+	public GoogleTasksMessageEndpointImpl(AuthorizationCodeFlow authorizationCodeFlow) {
+		super(authorizationCodeFlow);
 	}
 
 	@Override

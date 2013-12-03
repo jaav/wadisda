@@ -9,66 +9,7 @@
 	<packaging>war</packaging>
 	<name>wadisda REST application</name>
 
-	<properties>
-		<tapestry-release-version>5.3.6</tapestry-release-version>
-		<testng-release-version>5.14.10</testng-release-version>
-		<easymock-release-version>3.0</easymock-release-version>
-	</properties>
-
 	<dependencies>
-		<!-- Too set up an application with a database, change the artifactId below 
-			to tapestry-hibernate, and add a dependency on your JDBC driver. You'll also 
-			need to add Hibernate configuration files, such as hibernate.cfg.xml. -->
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-core</artifactId>
-			<version>${tapestry-release-version}</version>
-		</dependency>
-
-		<!-- This adds automatic compression of JavaScript and CSS when in production 
-			mode. -->
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-yuicompressor</artifactId>
-			<version>${tapestry-release-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-jpa</artifactId>
-			<version>${tapestry-release-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-beanvalidator</artifactId>
-			<version>${tapestry-release-version}</version>
-		</dependency>
-
-		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
-			plugin (which runs the tests) will fail, preventing Maven from packaging 
-			the WAR. Tapestry includes a large number of testing facilities designed 
-			for use with TestNG (http://testng.org/), so it's recommended. -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${testng-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>${easymock-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-test</artifactId>
-			<version>${tapestry-release-version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- Provided by the servlet container, but sometimes referenced in the 
 			application code. -->
@@ -77,33 +18,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- Provide dependency to the Tapestry javadoc taglet which replaces the 
-			Maven component report -->
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-javadoc</artifactId>
-			<version>${tapestry-release-version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>2.2.2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>jquery</artifactId>
-					<groupId>org.webjars</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.got5</groupId>
-			<artifactId>tapestry5-jquery</artifactId>
-			<version>3.3.3</version>
 		</dependency>
 
 		<dependency>
@@ -122,30 +36,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.3.1.Final</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.tynamo</groupId>
-			<artifactId>tapestry-security</artifactId>
-			<version>0.5.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.tynamo.security</groupId>
-			<artifactId>tynamo-federatedaccounts-core</artifactId>
-			<version>0.2.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.tynamo.security</groupId>
-			<artifactId>tynamo-federatedaccounts-rollingtokens</artifactId>
-			<version>0.0.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.2.1</version>
 		</dependency>
 
 		<dependency>
@@ -201,6 +91,12 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 			<version>1.5.0.M1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
 		</dependency>
 
 	</dependencies>

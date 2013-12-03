@@ -1,14 +1,12 @@
 package be.virtualsushi.wadisda.services.messages.impl;
 
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import be.virtualsushi.wadisda.entities.Registration;
 import be.virtualsushi.wadisda.entities.User;
 import be.virtualsushi.wadisda.entities.enums.MessageTypes;
 import be.virtualsushi.wadisda.entities.valueobjects.Message;
-import be.virtualsushi.wadisda.services.ExecutorService;
 import be.virtualsushi.wadisda.services.messages.MessageEndpoint;
 import be.virtualsushi.wadisda.services.messages.MessageService;
 
@@ -49,17 +47,14 @@ public class MessageServiceImpl implements MessageService {
 
 	private final Logger logger;
 
-	@InjectService("emailMessageEndpoint")
+	@Autowired
 	private MessageEndpoint emailMessageEndpoint;
 
-	@InjectService("googleCalendarMessageEndpoint")
+	@Autowired
 	private MessageEndpoint googleCalendarMessageEndpoint;
 
-	@InjectService("googleTasksMessageEndpoint")
+	@Autowired
 	private MessageEndpoint googleTasksMessageEndpoint;
-
-	@Inject
-	private ExecutorService executorService;
 
 	public MessageServiceImpl(Logger logger) {
 		this.logger = logger;
@@ -67,7 +62,6 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void sendMessage(MessageTypes type, Message message, User creator, Registration registration) {
-		executorService.execute(new SendMessageRunnable(type, message, registration));
 	}
 
 }
