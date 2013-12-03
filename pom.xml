@@ -162,6 +162,8 @@
 				<google.clientSecret>T6Ai0XdXzkNRSG4UvM0uAzRj</google.clientSecret>
 				<podio.api.secret>AMMqNQzdonNJ2PwiDbnmg94lfbWPwtzaaHwXwaWF1muar3Nm24FXJRxDwW6yqGIj</podio.api.secret>
 				<podio.api.client.id>wadisda</podio.api.client.id>
+				<podio.api.app.id>6292985</podio.api.app.id>
+				<podio.api.app.token>764d8308c3f345fd9e06e800d57f8365</podio.api.app.token>
 				<host.name>localhost</host.name>
 				<host.port>8080</host.port>
 			</properties>
@@ -176,6 +178,8 @@
 				<google.clientSecret>ol0QeK5hu22WOPvxpuIljr-3</google.clientSecret>
 				<podio.api.secret>AMMqNQzdonNJ2PwiDbnmg94lfbWPwtzaaHwXwaWF1muar3Nm24FXJRxDwW6yqGIj</podio.api.secret>
 				<podio.api.client.id>wadisda</podio.api.client.id>
+				<podio.api.app.id>6292985</podio.api.app.id>
+				<podio.api.app.token>764d8308c3f345fd9e06e800d57f8365</podio.api.app.token>
 				<host.name>www.fivegeese.com</host.name>
 				<host.port>80</host.port>
 			</properties>
@@ -190,6 +194,8 @@
 				<google.clientSecret>ol0QeK5hu22WOPvxpuIljr-3</google.clientSecret>
 				<podio.api.secret>AMMqNQzdonNJ2PwiDbnmg94lfbWPwtzaaHwXwaWF1muar3Nm24FXJRxDwW6yqGIj</podio.api.secret>
 				<podio.api.client.id>wadisda</podio.api.client.id>
+				<podio.api.app.id>6292985</podio.api.app.id>
+				<podio.api.app.token>764d8308c3f345fd9e06e800d57f8365</podio.api.app.token>
 				<host.name>www.fivegeese.com</host.name>
 				<host.port>80</host.port>
 			</properties>

@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import be.virtualsushi.wadisda.entities.Registration;
 
 @Repository(value = "registrations")
-public interface RegistrationsRepository extends WadisdaRepository<Registration> {
+public interface RegistrationsRepository extends BaseEntityRepository<Registration> {
 
 }

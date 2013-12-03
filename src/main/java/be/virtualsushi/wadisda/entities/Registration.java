@@ -72,14 +72,10 @@ public class Registration extends BaseEntity {
 	@JoinColumn(name = "attitude")
 	private Attitude attitude;
 
-	// @NotNull
-	// @NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "product_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "product", referencedColumnName = "id"))
 	private Set<Product> products;
 
-	// @NotNull
-	// @NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "product_question_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "product_question", referencedColumnName = "id"))
 	private Set<ProductQuestion> productQuestions;
@@ -89,20 +85,14 @@ public class Registration extends BaseEntity {
 	@JoinColumn(name = "question_type")
 	private QuestionType questionType;
 
-	// @NotNull
-	// @NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "relation_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "relation", referencedColumnName = "id"))
 	private Set<Relation> relations;
 
-	// @NotNull
-	// @NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "social_context_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "social_context", referencedColumnName = "id"))
 	private Set<SocialContext> socialContexts;
 
-	// @NotNull
-	// @NotEmpty
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "referrer_map", joinColumns = @JoinColumn(name = "registration", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "referrer", referencedColumnName = "id"))
 	private Set<Referer> referers;

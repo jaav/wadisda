@@ -3,11 +3,11 @@ package be.virtualsushi.wadisda;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class WebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WadisdaApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return new Class<?>[] { ApplicationConfig.class };
+		return new Class<?>[] { WadisdaConfig.class };
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class WebApplicationInitializer extends AbstractAnnotationConfigDispatche
 
 	@Override
 	protected String[] getServletMappings() {
-		return new String[] { "/api" };
+		return new String[] { "/" };
 	}
 
 }
